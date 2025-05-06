@@ -1,5 +1,5 @@
 {
-	"name": "frontend",
+	"name": "@epoim/frontend",
 	"private": true,
 	"type": "module",
 	"scripts": {
