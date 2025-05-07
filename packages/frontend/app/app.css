@@ -6,6 +6,7 @@
   --font-serif: "Merriweather", ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
+  --breakpoint-xs: 30rem;
 }
 
 html,
@@ -16,3 +17,6 @@ body {
     color-scheme: dark;
   }
 }
+
+@source "./routes";
+@source "./components";

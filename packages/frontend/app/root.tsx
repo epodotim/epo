@@ -5,9 +5,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  useNavigate,
+  useLocation,
+  useNavigation,
 } from "react-router";
 import type { Route } from "./+types/root";
 import "./app.css";
+import { AppProviders, AppHandlers } from "~/components/App";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -21,6 +26,19 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital@1&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap",
   },
 ];
+
+export const loader = async ({ request, context }: Route.LoaderArgs) => {
+  const env = context?.cloudflare?.env as Env;
+  const cookie = request.headers.get("cookie");
+
+  return {
+    cookie,
+    ENV: {
+      ...env,
+    },
+  };
+};
+export type RootLoader = typeof loader;
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -42,7 +60,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const ld = useLoaderData();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { location } = useNavigation();
+  const isNavigating = Boolean(location);
+
+  return (
+    <AppProviders ld={ld}>
+      <AppHandlers
+        ld={ld}
+        navigate={navigate}
+        pathname={pathname}
+        isNavigating={isNavigating}
+      />
+      <Outlet />
+      {/* <Toaster /> */}
+    </AppProviders>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
