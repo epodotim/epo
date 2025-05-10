@@ -2,9 +2,9 @@ import { http, cookieStorage, createConfig, createStorage } from "wagmi";
 import { base, baseSepolia, mainnet, sepolia } from "wagmi/chains";
 import { coinbaseWallet } from "wagmi/connectors";
 
-import { Config } from "wagmi";
-
-export const getWagmiConfig = (ENV: Env): Config =>
+export const getWagmiConfig: (ENV: Env) => ReturnType<typeof createConfig> = (
+  ENV: Env,
+) =>
   createConfig({
     chains: [mainnet, sepolia, base, baseSepolia],
     connectors: [

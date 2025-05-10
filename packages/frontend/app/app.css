@@ -6,7 +6,12 @@
   --font-serif: "Merriweather", ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
+
   --breakpoint-xs: 30rem;
+
+  --animate-spin-slow: spin 2.2s linear infinite;
+
+  --color-accent: #00B7F2;
 }
 
 html,

@@ -1,18 +1,21 @@
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
   useLoaderData,
-  useNavigate,
   useLocation,
+  useNavigate,
   useNavigation,
 } from "react-router";
 import type { Route } from "./+types/root";
 import "./app.css";
-import { AppProviders, AppHandlers } from "~/components/App";
+import { AppHandlers, AppProviders } from "~/components/App";
+import { ROOT_META } from "~/lib/const";
+
+export const meta: Route.MetaFunction = () => ROOT_META;
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -75,7 +78,6 @@ export default function App() {
         isNavigating={isNavigating}
       />
       <Outlet />
-      {/* <Toaster /> */}
     </AppProviders>
   );
 }
