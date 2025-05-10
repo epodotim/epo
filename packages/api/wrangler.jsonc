@@ -1,6 +1,6 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "api",
+  "$schema": "./../../node_modules/wrangler/config-schema.json",
+  "name": "epoim-api",
   "main": "src/index.ts",
   "compatibility_date": "2025-05-10"
   // "compatibility_flags": [
