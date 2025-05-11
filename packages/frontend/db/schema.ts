@@ -11,6 +11,7 @@ export const post = sqliteTable(
     label: text(),
     title: text(),
     content: text(),
+    preview: text(),
     createdAt: text().notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text().notNull().default(sql`CURRENT_TIMESTAMP`),
     publishedAt: text(),
