@@ -1,51 +1,36 @@
-# Welcome to React Router!
+# EPO Frontend
 
-A modern, production-ready template for building full-stack React applications using React Router.
+## Start
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
-
-```bash
-npm install
+```sh
+pnpm install
 ```
 
 ### Development
 
 Start the development server with HMR:
 
-```bash
-npm run dev
+```sh
+pnpm run dev
 ```
 
 Your application will be available at `http://localhost:5173`.
+
 
 ## Previewing the Production Build
 
 Preview the production build locally:
 
-```bash
-npm run preview
+```sh
+pnpm run preview
 ```
 
 ## Building for Production
 
 Create a production build:
 
-```bash
-npm run build
+```sh
+pnpm run build
 ```
 
 ## Deployment
@@ -55,25 +40,37 @@ Deployment is done using the Wrangler CLI.
 To build and deploy directly to production:
 
 ```sh
-npm run deploy
+pnpm dlx run deploy
 ```
 
 To deploy a preview URL:
 
 ```sh
-npx wrangler versions upload
+pnpm dlx wrangler versions upload
 ```
 
 You can then promote a version to production after verification or roll it out progressively.
 
 ```sh
-npx wrangler versions deploy
+pnpm dlx wrangler versions deploy
 ```
 
-## Styling
+### DB
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+Generate migration sql
 
----
+```sh
+pnpm run db:generate
+```
 
-Built with ❤️ using React Router.
+Migration
+
+```sh
+pnpm run db:migrate
+```
+
+Migtration for PROD
+
+```sh
+pnpm dlx wrangler d1 execute prod-d1-tutorial --remote --file=./xxxx.sql
+```
