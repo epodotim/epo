@@ -5,12 +5,12 @@
   "scripts": {
     "build": "react-router build",
     "cf-typegen": "wrangler types",
-    "deploy": "bun run build && wrangler deploy",
+    "deploy": "$npm_execpath run build && wrangler deploy",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "wrangler d1 migrations apply --local DB",
     "dev": "react-router dev",
-    "preview": "bun run build && vite preview",
-    "typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+    "preview": "$npm_execpath run build && vite preview",
+    "typecheck": "$npm_execpath run cf-typegen && react-router typegen && tsc -b"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-alpha.8",
