@@ -5,17 +5,11 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "api:dev": "pnpm --filter '@epoim/api' dev",
-    "api:deploy": "pnpm --filter '@epoim/api' deoloy",
-    "api:cf-typegen": "pnpm --filter '@epoim/api' cf-typegen",
-    "fe:build": "pnpm --filter '@epoim/frontend' build",
-    "fe:dev": "pnpm --filter '@epoim/frontend' dev",
-    "fe:deploy": "pnpm --filter '@epoim/frontend' deploy",
-    "fe:preview": "pnpm --filter '@epoim/frontend' preview"
+    "api": "pnpm --filter '@epoim/api'",
+    "fe": "pnpm --filter '@epoim/frontend'"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "bun-types": "latest",
     "wrangler": "latest"
   },
   "peerDependencies": {
