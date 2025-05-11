@@ -2,7 +2,26 @@
   "$schema": "./../../node_modules/wrangler/config-schema.json",
   "name": "epoim-api",
   "main": "src/index.ts",
-  "compatibility_date": "2025-05-10"
+  "compatibility_date": "2025-05-10",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "epo-db",
+      "database_id": "ded25a19-95a2-4698-b56e-873e0893c462"
+    }
+  ],
+  "secrets_store_secrets": [
+    {
+      "binding": "ALCHEMY_API_KEY",
+      "store_id": "97afb9f31a864e728b81e32277f335e0",
+      "secret_name": "EPO_ALCHEMY_API_KEY"
+    },
+    {
+      "binding": "CDP_CLIENT_API_KEY",
+      "store_id": "97afb9f31a864e728b81e32277f335e0",
+      "secret_name": "EPO_CDP_CLIENT_API_KEY"
+    }
+  ]
   // "compatibility_flags": [
   //   "nodejs_compat"
   // ],

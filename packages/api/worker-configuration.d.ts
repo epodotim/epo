@@ -4,6 +4,8 @@
 declare namespace Cloudflare {
   type Env = {
     ALCHEMY_API_KEY: string;
+    CDP_CLIENT_API_KEY: string;
+    DB: D1Database;
   };
 }
 interface CloudflareBindings extends Cloudflare.Env {}
