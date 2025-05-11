@@ -1,18 +1,18 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9c7e51fb-84b4-4a82-b040-20c4fe524d02",
+  "id": "8966776e-5eed-4164-871c-4e24ded5baa4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "Post": {
-      "name": "Post",
+    "post": {
+      "name": "post",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": true
         },
         "uid": {
           "name": "uid",
@@ -21,8 +21,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "owner": {
-          "name": "owner",
+        "author": {
+          "name": "author",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -51,6 +51,13 @@
         },
         "content": {
           "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "preview": {
+          "name": "preview",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -88,10 +95,17 @@
         }
       },
       "indexes": {
-        "owner": {
-          "name": "owner",
+        "uid_idx": {
+          "name": "uid_idx",
           "columns": [
-            "owner"
+            "uid"
+          ],
+          "isUnique": false
+        },
+        "author": {
+          "name": "author",
+          "columns": [
+            "author"
           ],
           "isUnique": false
         },
@@ -123,10 +137,10 @@
           ],
           "isUnique": false
         },
-        "owner_label_idx": {
-          "name": "owner_label_idx",
+        "author_label_idx": {
+          "name": "author_label_idx",
           "columns": [
-            "owner",
+            "author",
             "label"
           ],
           "isUnique": false
@@ -137,28 +151,42 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "PostMeta": {
-      "name": "PostMeta",
+    "post_meta": {
+      "name": "post_meta",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": true
         },
         "postId": {
           "name": "postId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "postUid": {
+          "name": "postUid",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "tag": {
-          "name": "tag",
+        "mKey": {
+          "name": "mKey",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mValue": {
+          "name": "mValue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "createdAt": {
@@ -171,17 +199,24 @@
         }
       },
       "indexes": {
-        "postId_idx": {
-          "name": "postId_idx",
+        "post_id_idx": {
+          "name": "post_id_idx",
           "columns": [
             "postId"
           ],
           "isUnique": false
         },
-        "tag_idx": {
-          "name": "tag_idx",
+        "post_uid_idx": {
+          "name": "post_uid_idx",
           "columns": [
-            "tag"
+            "postId"
+          ],
+          "isUnique": false
+        },
+        "m_key_idx": {
+          "name": "m_key_idx",
+          "columns": [
+            "mKey"
           ],
           "isUnique": false
         }

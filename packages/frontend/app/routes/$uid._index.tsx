@@ -7,7 +7,7 @@ import {
   getBasenameTextRecords,
 } from "~/lib/basename";
 import { getImageUrl } from "~/lib/utils";
-import type { Route } from "./+types/_index";
+import type { Route } from "./user/+types/_index";
 
 export function meta({ params }: Route.MetaArgs) {
   const uid = params?.uid ?? "A Profile on EPO";

@@ -21,6 +21,7 @@
     "@epoim/shared": "workspace:*",
     "@ethereum-attestation-service/eas-sdk": "^2.7.0",
     "@phosphor-icons/react": "^2.1.7",
+    "@react-router/fs-routes": "^7.6.0",
     "@tanstack/react-query": "^5.75.4",
     "@useorbis/db-sdk": "^0.0.60-alpha",
     "boring-avatars": "^1.11.2",

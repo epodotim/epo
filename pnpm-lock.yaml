@@ -51,6 +51,9 @@ importers:
       '@phosphor-icons/react':
         specifier: ^2.1.7
         version: 2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-router/fs-routes':
+        specifier: ^7.6.0
+        version: 7.6.0(@react-router/dev@7.6.0(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2)(react-router@7.6.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(vite@6.3.5(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2))(wrangler@4.14.4(@cloudflare/workers-types@4.20250510.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(typescript@5.8.3)
       '@tanstack/react-query':
         specifier: ^5.75.4
         version: 5.75.7(react@19.1.0)
@@ -65,7 +68,7 @@ importers:
         version: 2.1.1
       drizzle-orm:
         specifier: ^0.43.1
-        version: 0.43.1(@cloudflare/workers-types@4.20250510.0)(bun-types@1.2.12)
+        version: 0.43.1(@cloudflare/workers-types@4.20250510.0)(bun-types@1.2.13)
       ethers:
         specifier: ^6.13.7
         version: 6.14.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -148,7 +151,7 @@ importers:
     devDependencies:
       '@types/bun':
         specifier: latest
-        version: 1.2.12
+        version: 1.2.13
 
 packages:
 
@@ -1513,6 +1516,16 @@ packages:
       wrangler:
         optional: true
 
+  '@react-router/fs-routes@7.6.0':
+    resolution: {integrity: sha512-k/Sj4jWOa/PSdWSNSKwteIwMxFxSyVIkAHsI+pQ3bPZklbP6AGWfAFYhF4wnuaUTuKvkqqnlVZ87eUSePZcbcA==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      '@react-router/dev': ^7.6.0
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   '@react-router/node@7.6.0':
     resolution: {integrity: sha512-agjDPUzisLdGJ7Q2lx/Z3OfdS2t1k6qv/nTvA45iahGsQJCMDvMqVoIi7iIULKQJwrn4HWjM9jqEp75+WsMOXg==}
     engines: {node: '>=20.0.0'}
@@ -1921,8 +1934,8 @@ packages:
   '@types/bn.js@5.1.6':
     resolution: {integrity: sha512-Xh8vSwUeMKeYYrj3cX4lGQgFSF/N03r+tv4AiLl1SucqV+uTQpxRcnM8AkXKHwYP9ZPXOYXRr2KPXpVlIvqh9w==}
 
-  '@types/bun@1.2.12':
-    resolution: {integrity: sha512-lY/GQTXDGsolT/TiH72p1tuyUORuRrdV7VwOTOjDOt8uTBJQOJc5zz3ufwwDl0VBaoxotSk4LdP0hhjLJ6ypIQ==}
+  '@types/bun@1.2.13':
+    resolution: {integrity: sha512-u6vXep/i9VBxoJl3GjZsl/BFIsvML8DfVDO0RYLEwtSZSp981kEO1V5NwRcO1CPJ7AmvpbnDCiMKo3JvbDEjAg==}
 
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
@@ -2309,8 +2322,8 @@ packages:
     resolution: {integrity: sha512-WDtdLmJvAuNNPzByAYpRo2rF1Mmradw6gvWsQKf63476DDXmomT9zUiGypLcG4ibIM67vhAj8jJRdbmEws2Aqw==}
     engines: {node: '>=6.14.2'}
 
-  bun-types@1.2.12:
-    resolution: {integrity: sha512-tvWMx5vPqbRXgE8WUZI94iS1xAYs8bkqESR9cxBB1Wi+urvfTrF1uzuDgBHFAdO0+d2lmsbG3HmeKMvUyj6pWA==}
+  bun-types@1.2.13:
+    resolution: {integrity: sha512-rRjA1T6n7wto4gxhAO/ErZEtOXyEZEmnIHQfl0Dt1QQSB4QV0iP6BZ9/YB5fZaHFQ2dwHFrmPaRQ9GGMX01k9Q==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -6619,6 +6632,13 @@ snapshots:
       - tsx
       - yaml
 
+  '@react-router/fs-routes@7.6.0(@react-router/dev@7.6.0(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2)(react-router@7.6.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(vite@6.3.5(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2))(wrangler@4.14.4(@cloudflare/workers-types@4.20250510.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(typescript@5.8.3)':
+    dependencies:
+      '@react-router/dev': 7.6.0(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2)(react-router@7.6.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(vite@6.3.5(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2))(wrangler@4.14.4(@cloudflare/workers-types@4.20250510.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      minimatch: 9.0.5
+    optionalDependencies:
+      typescript: 5.8.3
+
   '@react-router/node@7.6.0(react-router@7.6.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)':
     dependencies:
       '@mjackson/node-fetch-server': 0.2.0
@@ -7250,9 +7270,9 @@ snapshots:
     dependencies:
       '@types/node': 20.17.46
 
-  '@types/bun@1.2.12':
+  '@types/bun@1.2.13':
     dependencies:
-      bun-types: 1.2.12
+      bun-types: 1.2.13
 
   '@types/debug@4.1.12':
     dependencies:
@@ -8135,7 +8155,7 @@ snapshots:
     dependencies:
       node-gyp-build: 4.8.4
 
-  bun-types@1.2.12:
+  bun-types@1.2.13:
     dependencies:
       '@types/node': 20.17.46
 
@@ -8470,10 +8490,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.43.1(@cloudflare/workers-types@4.20250510.0)(bun-types@1.2.12):
+  drizzle-orm@0.43.1(@cloudflare/workers-types@4.20250510.0)(bun-types@1.2.13):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250510.0
-      bun-types: 1.2.12
+      bun-types: 1.2.13
 
   dunder-proto@1.0.1:
     dependencies:
