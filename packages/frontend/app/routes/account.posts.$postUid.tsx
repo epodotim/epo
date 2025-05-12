@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import { redirect } from "react-router";
 import type { Route } from "./+types/account.posts._index";
 import * as schema from "./../../db/schema";
 import { useParams, useLocation } from "react-router";
@@ -18,22 +19,30 @@ export async function action({ request, context, params }: Route.ActionArgs) {
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
   console.log("action formData:", { title, content });
-  const uid = uuidv4();
 
+  // 共通データ
   const data = {
-    // example
     title: title,
     content: content,
     author: "user123",
-    uid: uid,
   };
 
   try {
-    if (params.postUid && params.postUid !== "new") {
+    if (params.postUid === "new") {
+      // 新規登録
+      await context.db.insert(schema.post).values({
+        ...data,
+        uid: uuidv4(),
+      });
+    } else if (params.postUid) {
+      // 編集
       await context.db.update(schema.post).set(data).where(eq(schema.post.uid, params.postUid));
     } else {
-      await context.db.insert(schema.post).values(data);
+      // 不正なパス
+      return { error: "Invalid postUid" };
     }
+    // 正常終了時は一覧ページへリダイレクト
+    return redirect("/account/posts");
   } catch (error) {
     return { errror: "Error adding to post" };
   }
@@ -71,12 +80,15 @@ export default function DashboardPostEdit({
     content: z.string(),
   });
 
+  // 投稿データ取得
+  const post = loaderData?.post;
+
   // conform useFormセットアップ
   const [form, fields] = useForm<{ title: string; content: string }>({
     id: "post-form",
     defaultValue: {
-      title: "",
-      content: "",
+      title: isNewPost ? "" : post?.title ?? "",
+      content: isNewPost ? "" : post?.content ?? "",
     },
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: postSchema });
@@ -84,30 +96,19 @@ export default function DashboardPostEdit({
     shouldValidate: "onBlur",
   });
 
-  // 投稿データ取得
-  const post = loaderData?.post;
-
   return (
     <>
-      <h1>{post?.title ?? ""}</h1>
-      <ul className="">{post?.content ?? ""}</ul>
-      {isNewPost ? (
-        // 新規投稿フォーム
-        <form method="post" {...getFormProps(form)}>
-          <label htmlFor={fields.title.id}>Title</label>
-          <input
-            {...getInputProps(fields.title, { type: "text", id: fields.title.id })}
-          />
-          <label htmlFor={fields.content.id}>Content</label>
-          <textarea
-            {...getTextareaProps(fields.content)}
-          />
-          <button type="submit">Submit</button>
-        </form>
-      ) : (
-        // 編集フォーム
-        <div>編集フォーム (uid: {postUid})</div>
-      )}
+      <form method="post" {...getFormProps(form)}>
+        <label htmlFor={fields.title.id}>Title</label>
+        <input
+          {...getInputProps(fields.title, { type: "text", id: fields.title.id })}
+        />
+        <label htmlFor={fields.content.id}>Content</label>
+        <textarea
+          {...getTextareaProps(fields.content)}
+        />
+        <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
+      </form>
     </>
   );
 }
