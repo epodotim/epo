@@ -151,10 +151,6 @@ importers:
       typescript:
         specifier: ^5
         version: 5.8.3
-    devDependencies:
-      '@types/bun':
-        specifier: latest
-        version: 1.2.13
 
 packages:
 
@@ -1936,9 +1932,6 @@ packages:
 
   '@types/bn.js@5.1.6':
     resolution: {integrity: sha512-Xh8vSwUeMKeYYrj3cX4lGQgFSF/N03r+tv4AiLl1SucqV+uTQpxRcnM8AkXKHwYP9ZPXOYXRr2KPXpVlIvqh9w==}
-
-  '@types/bun@1.2.13':
-    resolution: {integrity: sha512-u6vXep/i9VBxoJl3GjZsl/BFIsvML8DfVDO0RYLEwtSZSp981kEO1V5NwRcO1CPJ7AmvpbnDCiMKo3JvbDEjAg==}
 
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
@@ -7276,10 +7269,6 @@ snapshots:
     dependencies:
       '@types/node': 20.17.46
 
-  '@types/bun@1.2.13':
-    dependencies:
-      bun-types: 1.2.13
-
   '@types/debug@4.1.12':
     dependencies:
       '@types/ms': 2.1.0
@@ -8166,6 +8155,7 @@ snapshots:
   bun-types@1.2.13:
     dependencies:
       '@types/node': 20.17.46
+    optional: true
 
   busboy@1.6.0:
     dependencies:

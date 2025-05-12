@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
-import type { Route } from "./+types/account.posts._index";
+import type { Route } from "./+types/account.posts.$postUid";
 import * as schema from "./../../db/schema";
 import { useParams, useLocation } from "react-router";
 
