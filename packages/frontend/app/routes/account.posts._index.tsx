@@ -11,6 +11,7 @@ export async function loader({ context }: Route.LoaderArgs) {
     with: {
       post_meta: true,
     },
+    orderBy: (post, { desc }) => [desc(post.createdAt)],
   });
 
   return {
@@ -24,13 +25,14 @@ export default function DashboardPosts({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <h1>User Posts</h1>
-      <ul className="border-b border-black w-full">
+      <div className="border-b border-black w-full">
         {loaderData?.posts?.map((post) => (
-          <li key={post.id} className="border-t border-black p-6">
-            <Link to={`/dashboard/posts/${post.uid}`}>{post.title}</Link>
-          </li>
+          <div key={post.id} className="border-t border-black p-6 flex flex-row items-center gap-4">
+            <Link to={`/account/posts/${post.uid}`} className="font-bold flex-1">{post.title}</Link>
+            <span className="text-xs text-gray-500">{new Date(post.createdAt).toLocaleString()}</span>
+          </div>
         ))}
-      </ul>
+      </div>
     </>
   );
 }
