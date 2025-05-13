@@ -2,12 +2,13 @@ import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import type { Route } from "./+types/account.posts.$postUid";
 import * as schema from "./../../db/schema";
-import { useParams, useLocation } from "react-router";
+import { useLocation } from "react-router";
 
-import { v4 as uuidv4 } from 'uuid';
+import short from 'short-uuid';
 import { useForm, getFormProps, getInputProps, getTextareaProps } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
+import { Editor } from "~/components/Editor"
 
 export function meta(_: Route.MetaArgs) {
   return [{ title: "Dashboard | EPO" }];
@@ -32,7 +33,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
       // 新規登録
       await context.db.insert(schema.post).values({
         ...data,
-        uid: uuidv4(),
+        uid: short.generate(),
       });
     } else if (params.postUid) {
       // 編集
@@ -44,7 +45,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
     // 正常終了時は一覧ページへリダイレクト
     return redirect("/account/posts");
   } catch (error) {
-    return { errror: "Error adding to post" };
+    return { error: "Error adding to post" };
   }
 }
 
@@ -69,7 +70,6 @@ export default function DashboardPostEdit({
   loaderData,
 }: Route.ComponentProps) {
   console.log("----- Dashboard Post ---", loaderData?.post);
-  const { postUid } = useParams();
   const location = useLocation();
 
   const isNewPost = location.pathname === "/account/posts/new";
@@ -107,6 +107,7 @@ export default function DashboardPostEdit({
         <textarea
           {...getTextareaProps(fields.content)}
         />
+        <Editor />
         <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
       </form>
     </>
