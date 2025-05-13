@@ -1,3 +1,4 @@
+import React from "react";
 import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
 import type { Route } from "./+types/account.posts.$postUid";
@@ -95,6 +96,8 @@ export default function DashboardPostEdit({
     },
     shouldValidate: "onBlur",
   });
+  const [markdown, setMarkdown] = React.useState(fields.content.value ?? "");
+
 
   return (
     <>
@@ -104,10 +107,19 @@ export default function DashboardPostEdit({
           {...getInputProps(fields.title, { type: "text", id: fields.title.id })}
         />
         <label htmlFor={fields.content.id}>Content</label>
-        <textarea
-          {...getTextareaProps(fields.content)}
-        />
-        <Editor />
+        {/* content用のhidden input */}
+        {(() => {
+          return (
+            <>
+              <input {...getInputProps(fields.content, { type: "hidden" })} value={markdown}/>
+              <Editor
+                markdown={markdown}
+                onChange={setMarkdown}
+                className="text-white"
+              />
+            </>
+          );
+        })()}
         <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
       </form>
     </>

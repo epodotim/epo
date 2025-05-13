@@ -17,30 +17,39 @@ export function ClientOnly({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export function Editor() {
+type EditorProps = {
+  markdown: string;
+  onChange: (value: string) => void;
+  className?: string;
+};
+
+export function Editor({ markdown, onChange, className }: EditorProps) {
   const [EditorComponent, setEditorComponent] = useState<MDXEditorType | null>(null);
 
   useEffect(() => {
-    // クライアントサイドでのみMDXEditorを動的にインポート
     import('@mdxeditor/editor')
       .then(module => {
         setEditorComponent(() => module.MDXEditor);
       })
       .catch(err => {
         console.error("Failed to load MDXEditor", err);
-        // エラーハンドリング: 例えばフォールバックUIを表示するなど
       });
   }, []);
 
+  // MDXEditorのonChangeイベント名は仮にonChangeとする（実際のAPIに合わせて修正要）
   return (
     <ClientOnly>
       <Suspense fallback={<div>Loading editor...</div>}>
         {EditorComponent ? (
-          <EditorComponent markdown="hello epo" className="text-white"/>
+          <EditorComponent
+            markdown={markdown}
+            onChange={onChange}
+            className={`dark-theme dark-editor ${className ?? "text-white"}`}
+          />
         ) : (
-          <div>Loading editor component...</div> // MDXEditorコンポーネント自体のロード中
+          <div>Loading editor component...</div>
         )}
       </Suspense>
     </ClientOnly>
-  )
+  );
 }
