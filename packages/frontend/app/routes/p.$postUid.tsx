@@ -18,7 +18,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
 
 export function meta({ data }: Route.MetaArgs) {
   const title = `${data?.post?.title ?? "A Post on EPO"}${
-    data?.post?.uid && ` | ${data?.post?.uid}`
+    data?.post?.author && ` | ${data?.post?.author}`
   }`;
 
   return [{ title }];

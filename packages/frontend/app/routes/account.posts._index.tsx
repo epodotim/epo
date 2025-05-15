@@ -19,17 +19,27 @@ export async function loader({ context }: Route.LoaderArgs) {
   };
 }
 
-export default function DashboardPosts({ loaderData }: Route.ComponentProps) {
+export default function AccountPostsPage({ loaderData }: Route.ComponentProps) {
   console.log("----- Dashboard Posts ---", loaderData?.posts);
 
   return (
     <>
       <h1>User Posts</h1>
-      <div className="border-b border-black w-full">
+      <div className="w-full border-black border-b">
         {loaderData?.posts?.map((post) => (
-          <div key={post.id} className="border-t border-black p-6 flex flex-row items-center gap-4">
-            <Link to={`/account/posts/${post.uid}`} className="font-bold flex-1">{post.title}</Link>
-            <span className="text-xs text-gray-500">{new Date(post.createdAt).toLocaleString()}</span>
+          <div
+            key={post.id}
+            className="flex flex-row items-center gap-4 border-black border-t p-6"
+          >
+            <Link
+              to={`/account/posts/${post.uid}`}
+              className="font-bold flex-1"
+            >
+              {post.title}
+            </Link>
+            <span className="text-xs text-gray-500">
+              {new Date(post.createdAt).toLocaleString()}
+            </span>
           </div>
         ))}
       </div>

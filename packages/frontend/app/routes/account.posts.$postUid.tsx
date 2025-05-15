@@ -1,18 +1,22 @@
 import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
-import type { Route } from "./+types/account.posts.$postUid";
-import * as schema from "./../../db/schema";
+import * as schema from "db/schema";
 import { useParams, useLocation } from "react-router";
+import type { Route } from "./+types/account.posts.$postUid";
 
-import { v4 as uuidv4 } from 'uuid';
-import { useForm, getFormProps, getInputProps, getTextareaProps } from "@conform-to/react";
+import { v4 as uuidv4 } from "uuid";
+import {
+  useForm,
+  getFormProps,
+  getInputProps,
+  getTextareaProps,
+} from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
 
 export function meta(_: Route.MetaArgs) {
   return [{ title: "Dashboard | EPO" }];
 }
-
 
 export async function action({ request, context, params }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -36,7 +40,10 @@ export async function action({ request, context, params }: Route.ActionArgs) {
       });
     } else if (params.postUid) {
       // 編集
-      await context.db.update(schema.post).set(data).where(eq(schema.post.uid, params.postUid));
+      await context.db
+        .update(schema.post)
+        .set(data)
+        .where(eq(schema.post.uid, params.postUid));
     } else {
       // 不正なパス
       return { error: "Invalid postUid" };
@@ -64,8 +71,7 @@ export async function loader({ context, params }: Route.ActionArgs) {
   };
 }
 
-
-export default function DashboardPostEdit({
+export default function AccountPostEditPage({
   loaderData,
 }: Route.ComponentProps) {
   console.log("----- Dashboard Post ---", loaderData?.post);
@@ -101,12 +107,13 @@ export default function DashboardPostEdit({
       <form method="post" {...getFormProps(form)}>
         <label htmlFor={fields.title.id}>Title</label>
         <input
-          {...getInputProps(fields.title, { type: "text", id: fields.title.id })}
+          {...getInputProps(fields.title, {
+            type: "text",
+            id: fields.title.id,
+          })}
         />
         <label htmlFor={fields.content.id}>Content</label>
-        <textarea
-          {...getTextareaProps(fields.content)}
-        />
+        <textarea {...getTextareaProps(fields.content)} />
         <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
       </form>
     </>

@@ -1,9 +1,9 @@
-import type { Route } from "./+types/dashboard._index";
+import type { Route } from "./+types/account._index";
 
 export function meta(_: Route.MetaArgs) {
   return [{ title: "Dashboard | EPO" }];
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function AccountPage({ loaderData }: Route.ComponentProps) {
   return <p>User Account Home</p>;
 }
