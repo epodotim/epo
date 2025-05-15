@@ -3,24 +3,70 @@
 @theme {
   --font-sans: "Merriweather Sans", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-serif: "Merriweather", ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-serif: "Merriweather", ui-serif, Georgia, Cambria, "Times New Roman",
+    Times, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-dot: "Tiny5", monospace;
 
   --breakpoint-xs: 30rem;
 
   --animate-spin-slow: spin 2.2s linear infinite;
 
-  --color-accent: #00B7F2;
+  --color-accent: #00b7f2;
+}
+
+@utility content {
+  @apply bg-white text-black dark:bg-gray-950 dark:text-white;
+}
+
+@utility border-c1 {
+  @apply border-gray-950/30 dark:border-white/30;
 }
 
 html,
 body {
-  @apply bg-white text-black dark:bg-gray-950 dark:text-white;
+  @apply content;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+.wrapper {
+  @apply flex h-screen flex-col;
+  main {
+    @apply flex-grow;
+  }
+}
+
+.profile {
+  ul.links {
+    @apply flex flex-wrap gap-y-2 gap-x-2.5 text-sm;
+
+    li {
+      @apply flex justify-center items-center;
+
+      a {
+        @apply border-2 border-c1 rounded-full flex items-center justify-center h-7.5 hover:opacity-90;
+      }
+
+      a.icon {
+        @apply w-7.5;
+      }
+
+      a.url {
+        @apply w-auto pl-2 pr-2.5;
+        svg {
+          @apply mr-0.5;
+        }
+      }
+    }
+  }
+}
+
+a.pop {
+  @apply flex items-center-safe justify-center space-x-2;
 }
 
 @source "./routes";

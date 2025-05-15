@@ -7,10 +7,22 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "nursery": { "useSortedClasses": "warn" },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "fix": "safe",
+          "options": {
+            "attributes": ["classList"],
+            "functions": ["clsx"]
+          }
+        }
+      },
       "correctness": {
         "noUnusedImports": "warn",
         "noUnusedVariables": "warn"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
       }
     }
   },

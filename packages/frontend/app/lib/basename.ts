@@ -17,6 +17,7 @@ export const BASENAME_L2_RESOLVER_ADDRESS =
 
 export enum BasenameTextRecordKeys {
   Description = "description",
+  Name = "name",
   Keywords = "keywords",
   Url = "url",
   Url2 = "url2",
@@ -36,11 +37,12 @@ export enum BasenameTextRecordKeys {
 export const textRecordsKeysEnabled = [
   BasenameTextRecordKeys.Description,
   BasenameTextRecordKeys.Keywords,
+  BasenameTextRecordKeys.Name,
   BasenameTextRecordKeys.Url,
   BasenameTextRecordKeys.Url2,
   BasenameTextRecordKeys.Url3,
   BasenameTextRecordKeys.Github,
-  BasenameTextRecordKeys.Email,
+  // BasenameTextRecordKeys.Email,
   // BasenameTextRecordKeys.Phone,
   BasenameTextRecordKeys.Twitter,
   BasenameTextRecordKeys.Farcaster,
