@@ -9,6 +9,7 @@ import { useAccount } from "wagmi";
 import { Toaster } from "~/components/ui/Toaster";
 import { getWagmiConfig } from "~/lib/wagmi";
 import type { RootLoader } from "~/root";
+import { ClientOnly } from "remix-utils/client-only";
 
 export function Loading() {
   return (
@@ -40,24 +41,28 @@ export function AppProviders({
             staleTime: 60 * 1000,
           },
         },
-      }),
+      })
   );
 
   return (
-    <WagmiProvider
-      config={wagmiConfig}
-      initialState={cookieToInitialState(wagmiConfig, ld?.cookie)}
-    >
-      <QueryClientProvider client={queryClient}>
-        <OnchainKitProvider
-          apiKey={ld?.ENV?.CDP_CLIENT_API_KEY}
-          chain={baseSepolia}
+    <ClientOnly>
+      {() => (
+        <WagmiProvider
+          config={wagmiConfig}
+          initialState={cookieToInitialState(wagmiConfig, ld?.cookie)}
         >
-          {children}
-          <Toaster />
-        </OnchainKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+          <QueryClientProvider client={queryClient}>
+            <OnchainKitProvider
+              apiKey={ld?.ENV?.CDP_CLIENT_API_KEY}
+              chain={baseSepolia}
+            >
+              {children}
+              <Toaster />
+            </OnchainKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      )}
+    </ClientOnly>
   );
 }
 
