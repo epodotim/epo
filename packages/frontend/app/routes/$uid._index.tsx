@@ -1,13 +1,8 @@
-import Avatar from "boring-avatars";
 import { useParams } from "react-router";
-import Records from "~/components/Records";
-import {
-  type Basename,
-  getBasenameTextRecord,
-  getBasenameTextRecords,
-} from "~/lib/basename";
-import { getImageUrl } from "~/lib/utils";
-import type { Route } from "./user/+types/_index";
+import { BaseLayout } from "~/components/Layouts";
+import Profile from "~/components/Profile";
+import type { Basename } from "~/lib/basename";
+import type { Route } from "./+types/$uid._index";
 
 export function meta({ params }: Route.MetaArgs) {
   const uid = params?.uid ?? "A Profile on EPO";
@@ -17,17 +12,36 @@ export function meta({ params }: Route.MetaArgs) {
 
 export async function loader({ params }: Route.LoaderArgs) {
   const uid = params?.uid as Basename;
-  const location = await getBasenameTextRecord(uid, "location");
-  const url2 = await getBasenameTextRecord(uid, "url2");
-  const url3 = await getBasenameTextRecord(uid, "url3");
-  const textRecords = await getBasenameTextRecords(uid);
+  // const location = await getBasenameTextRecord(uid, "location");
+  // const url2 = await getBasenameTextRecord(uid, "url2");
+  // const url3 = await getBasenameTextRecord(uid, "url3");
+  // const textRecords = await getBasenameTextRecords(uid);
+  // return {
+  //   uid,
+  //   records: {
+  //     ...textRecords,
+  //     location,
+  //     url2,
+  //     url3,
+  //   },
+  // };
+
   return {
-    uid,
+    uid: "yujiym.base.eth",
     records: {
-      ...textRecords,
-      location,
-      url2,
-      url3,
+      description: "A builder",
+      keywords:
+        "Solidity,Javascript,Typescript,UI/UX,Go,Prototyping,Product management",
+      url: "https://oboro.xyz",
+      url2: "https://kon.xyz",
+      "com.github": "yujiym",
+      "com.twitter": "yujiym",
+      "xyz.farcaster": "yujiym",
+      "org.telegram": "yujiym",
+      avatar:
+        "ipfs://bafybeicmbmchjfn4ahlyxnqswdaeim4ornfkdf4ahlcc4txpr6y4r33rri",
+      location: "Japan",
+      url3: "",
     },
   };
 }
@@ -37,27 +51,13 @@ export default function User({ loaderData }: Route.ComponentProps) {
   console.log("----- User ---", loaderData);
 
   return (
-    loaderData?.records && (
-      <>
-        <div className="container mx-auto max-w-[420px] p-6">
-          {loaderData?.records?.avatar ? (
-            <img
-              src={getImageUrl(loaderData.records.avatar)}
-              className="h-20 w-20 rounded-full border-2 border-white/20"
-              alt={`${uid}'s avatar`}
-            />
-          ) : (
-            <Avatar
-              variant="beam"
-              name={uid ?? ""}
-              size={80}
-              className="rounded-full border-2 border-white/20"
-            />
-          )}
+    <BaseLayout>
+      {loaderData?.records && (
+        <div className="profile container mx-auto max-w-screen-sm">
+          <Profile data={loaderData} />
+          <hr />
         </div>
-        <p>{uid}</p>
-        <Records data={loaderData} />
-      </>
-    )
+      )}
+    </BaseLayout>
   );
 }
