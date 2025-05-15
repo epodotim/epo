@@ -33,24 +33,22 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 
   try {
     if (params.postUid === "new") {
-      // 新規登録
+      // new
       await context.db.insert(schema.post).values({
         ...data,
         uid: uuidv4(),
       });
     } else if (params.postUid) {
-      // 編集
+      // edit
       await context.db
         .update(schema.post)
         .set(data)
         .where(eq(schema.post.uid, params.postUid));
     } else {
-      // 不正なパス
       return { error: "Invalid postUid" };
     }
-    // 正常終了時は一覧ページへリダイレクト
     return redirect("/account/posts");
-  } catch (error) {
+  } catch (error: any) {
     return { errror: "Error adding to post" };
   }
 }
@@ -80,16 +78,13 @@ export default function AccountPostEditPage({
 
   const isNewPost = location.pathname === "/account/posts/new";
 
-  // zodスキーマ定義
   const postSchema = z.object({
     title: z.string(),
     content: z.string(),
   });
 
-  // 投稿データ取得
   const post = loaderData?.post;
 
-  // conform useFormセットアップ
   const [form, fields] = useForm<{ title: string; content: string }>({
     id: "post-form",
     defaultValue: {

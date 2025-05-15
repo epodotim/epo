@@ -1,6 +1,6 @@
-import { List } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import Logo from "~/components/icons/EPO";
+import DarkmodeMenu from "~/components/ui/DarkmodeMenu";
 
 export function BaseLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -23,19 +23,13 @@ export function PostLayout({
     <div className="wrapper">
       <header className="content sticky top-0 flex h-12 min-h-12 items-center justify-between border-b px-4 backdrop-blur-xs">
         {renderHeader ?? <span />}
-        <Menu />
+        <DarkmodeMenu />
       </header>
       <main>{children}</main>
       <Footer />
     </div>
   );
 }
-
-const Menu = () => (
-  <button type="button">
-    <List size={20} />
-  </button>
-);
 
 const Footer = () => (
   <footer>
