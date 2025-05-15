@@ -16,6 +16,7 @@
     "@base-ui-components/react": "^1.0.0-alpha.8",
     "@coinbase/onchainkit": "^0.38.10",
     "@coinbase/wallet-sdk": "^4.3.2",
+    "@coinbase/x402": "^0.3.5",
     "@conform-to/react": "^1.5.0",
     "@conform-to/zod": "^1.5.0",
     "@epoim/shared": "workspace:*",
@@ -39,6 +40,7 @@
     "tailwind-merge": "^3.2.0",
     "viem": "^2.29.0",
     "wagmi": "^2.15.2",
+    "x402-hono": "^0.3.4",
     "zod": "^3.24.4"
   },
   "devDependencies": {
