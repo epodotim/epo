@@ -6,9 +6,10 @@ import { Markdown } from "tiptap-markdown";
 type Props = {
   markdown: string;
   onChange: (markdown: string) => void;
+  className?: string;
 };
 
-export const MarkdownEditor = ({ markdown, onChange }: Props) => {
+export const MarkdownEditor = ({ markdown, onChange, className }: Props) => {
   const editor = useEditor({
     extensions: [StarterKit, Markdown],
     content: markdown,
@@ -31,7 +32,7 @@ export const MarkdownEditor = ({ markdown, onChange }: Props) => {
 
   return (
     <div>
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className={`h-24 ${className}`}/>
     </div>
   );
 };

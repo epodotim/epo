@@ -112,7 +112,9 @@ export default function AccountPostEditPage({
 
   return (
     <AccountLayout title="Edit Post">
-      <div className="container mx-auto max-w-screen-sm">
+      <div className="content container mx-auto max-w-screen-sm py-8">
+        <div>Plan</div>
+
         <ToggleSelector
           value={isPaid ? "paid" : "free"}
           onChange={(val) => setIsPaid(val === "paid")}
@@ -120,11 +122,12 @@ export default function AccountPostEditPage({
             { label: "Free", value: "free", ariaLabel: "Free plan" },
             { label: "Paid", value: "paid", ariaLabel: "Paid plan" },
           ]}
+          className="border-c2 mb-5"
         />
         <form
           method="post"
           {...getFormProps(form)}
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-5"
         >
           <div className="flex flex-col">
             <label htmlFor={fields.title.id}>Title</label>
@@ -132,7 +135,7 @@ export default function AccountPostEditPage({
               {...getInputProps(fields.title, {
                 type: "text",
                 id: fields.title.id,
-              })}
+              })} className="border border-c2"
             />
           </div>
           {isPaid && (
@@ -146,6 +149,7 @@ export default function AccountPostEditPage({
                 <MarkdownEditor
                   markdown={previewMarkdown}
                   onChange={(updated) => setPreviewMarkdown(updated)}
+                  className="border border-c2"
                 />
               </>
             </div>
@@ -160,16 +164,17 @@ export default function AccountPostEditPage({
               <MarkdownEditor
                 markdown={contentMarkdown}
                 onChange={(updated) => setContentMarkdown(updated)}
+                className="border border-c2"
               />
             </>
           </div>
           {isPaid && (
             <div className="flex flex-col">
               <label htmlFor={fields.price.id}>Price</label>
-              <input {...getInputProps(fields.price, { type: "text" })} />
+              <input {...getInputProps(fields.price, { type: "text" })} className="border boder-c2"/>
             </div>
           )}
-          <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
+          <button type="submit" className="btn">{isNewPost ? "Submit" : "更新"}</button>
         </form>
       </div>
     </AccountLayout>
