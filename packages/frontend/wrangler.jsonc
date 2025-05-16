@@ -19,6 +19,12 @@
       "migrations_dir": "db/drizzle"
     }
   ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "epo-storage",
+    }
+  ],
   "secrets_store_secrets": [
     {
       "binding": "ALCHEMY_API_KEY",
