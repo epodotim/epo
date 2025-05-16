@@ -21,8 +21,6 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function AccountPostsPage({ loaderData }: Route.ComponentProps) {
-  console.log("----- Dashboard Posts ---", loaderData?.posts);
-
   return (
     <AccountLayout title="My Posts">
       <div className="container mx-auto max-w-screen-sm">
