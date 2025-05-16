@@ -23,7 +23,7 @@
 }
 
 @utility content-menu {
-  @apply bg-white/95 text-black dark:bg-gray-950/95 dark:text-white backdrop-blur-sm;
+  @apply bg-white/70 text-black dark:bg-gray-950/70 dark:text-white backdrop-blur-sm;
 }
 
 @utility hover-bg-c1 {
@@ -92,6 +92,22 @@ body {
       }
     }
   }
+  ul.lists {
+    @apply w-full border-c1 border-t;
+
+    li {
+      @apply h-14 border-c1 border-b;
+      a {
+        @apply flex items-center justify-between h-full px-2.5;
+        span {
+          @apply text-sm;
+        }
+        &:hover {
+          @apply hover-bg-c1;
+        }
+      }
+    }
+  }
 }
 
 a.pop {
@@ -126,6 +142,10 @@ input:read-only {
 
 hr.dashed {
   @apply border-dashed border-t-1 border-c1;
+}
+
+.pill {
+  @apply text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-950 dark:text-white ml-3;
 }
 
 @source "./routes";

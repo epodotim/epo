@@ -109,7 +109,7 @@ export default function AccountPostEditPage({
           />
           <label htmlFor={fields.content.id}>Content</label>
           <textarea {...getTextareaProps(fields.content)} />
-          <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
+          <button type="submit">{isNewPost ? "Submit" : "Update"}</button>
         </form>
       </div>
     </AccountLayout>

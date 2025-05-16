@@ -6,8 +6,9 @@ import { useState } from "react";
 import { cn } from "~/lib/utils";
 import { List as MenuIcon } from "@phosphor-icons/react";
 import { SIDE_MENUS } from "~/components/ui/UserMenu";
+import { useEffect } from "react";
 
-export function BaseLayout({ children }: { children: React.ReactNode }) {
+export function UserLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="wrapper">
       <header className="border-accent border-t-6" />
@@ -29,13 +30,13 @@ export function AccountLayout({
   return (
     <div className="wrapper">
       <header className="sticky top-0 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu md:pl-64">
-        <h1 className="flex items-center justify-center">
+        <h1 className="hover-bg-c1 flex items-center justify-center rounded-full p-1.5">
           <button
             type="button"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="block md:hidden"
+            className="hover:cursor-pointer md:hidden"
           >
-            <MenuIcon size={24} />
+            <MenuIcon size={22} />
           </button>
           <span className="hidden md:flex">{title ?? "Dashboard"}</span>
         </h1>
@@ -64,17 +65,33 @@ export function AccountLayout({
   );
 }
 
-export function PostLayout({
+export function BaseLayout({
   children,
   renderHeader,
 }: {
   children: React.ReactNode;
   renderHeader?: React.ReactNode;
 }) {
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="wrapper">
-      <header className="sticky top-0 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu">
-        {renderHeader ?? <span />}
+      <header
+        className={cn(
+          "sticky top-0 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu",
+          isScrolled ? "border-c2" : "border-transparent"
+        )}
+      >
+        {renderHeader ?? <Logo className="h-8 w-8" />}
         <div className="flex items-center gap-2">
           <DarkmodeMenu />
           <UserMenu />

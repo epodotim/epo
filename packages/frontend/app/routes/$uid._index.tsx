@@ -3,6 +3,7 @@ import { BaseLayout } from "~/components/Layouts";
 import Profile from "~/components/Profile";
 import type { Basename } from "~/lib/basename";
 import type { Route } from "./+types/$uid._index";
+import { Tabs } from "@base-ui-components/react/tabs";
 
 export function meta({ params }: Route.MetaArgs) {
   const uid = params?.uid ?? "A Profile on EPO";
@@ -55,7 +56,39 @@ export default function User({ loaderData }: Route.ComponentProps) {
       {loaderData?.records && (
         <div className="profile container mx-auto max-w-screen-sm">
           <Profile data={loaderData} />
-          <hr />
+          <Tabs.Root className="" defaultValue="posts">
+            <Tabs.List className="relative z-0 flex gap-4 border-c2 border-b-2">
+              <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="posts">
+                Posts
+                <span className="pill">3</span>
+              </Tabs.Tab>
+              <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="attestations">
+                Attestions<span className="pill">0</span>
+              </Tabs.Tab>
+              <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="recieved">
+                Recieved<span className="pill">1</span>
+              </Tabs.Tab>
+              <Tabs.Indicator className="-bottom-0.5 absolute z-[-1] w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] border-c1 border-b-2 transition-all duration-200 ease-in-out" />
+            </Tabs.List>
+            <Tabs.Panel
+              className="relative flex h-32 items-center justify-center"
+              value="posts"
+            >
+              <p className="opacity-70">No posts yet</p>
+            </Tabs.Panel>
+            <Tabs.Panel
+              className="relative flex h-32 items-center justify-center"
+              value="attestations"
+            >
+              <p className="opacity-70">No attestations yet</p>
+            </Tabs.Panel>
+            <Tabs.Panel
+              className="relative flex h-32 items-center justify-center"
+              value="recieved"
+            >
+              <p className="opacity-70">No recieved attestations yet</p>
+            </Tabs.Panel>
+          </Tabs.Root>
         </div>
       )}
     </BaseLayout>
