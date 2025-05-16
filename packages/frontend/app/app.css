@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --font-sans: "Merriweather Sans", ui-sans-serif, system-ui, sans-serif,
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: "Merriweather", ui-serif, Georgia, Cambria, "Times New Roman",
     Times, serif;
@@ -20,8 +22,32 @@
   @apply bg-white text-black dark:bg-gray-950 dark:text-white;
 }
 
+@utility content-menu {
+  @apply bg-white/95 text-black dark:bg-gray-950/95 dark:text-white backdrop-blur-sm;
+}
+
+@utility hover-bg-c1 {
+  @apply hover:bg-gray-950/10 dark:hover:bg-white/10;
+}
+
 @utility border-c1 {
+  @apply border-gray-950 dark:border-white;
+}
+
+@utility border-c2 {
   @apply border-gray-950/30 dark:border-white/30;
+}
+
+@utility fill-c1 {
+  @apply fill-gray-950/30 dark:fill-white/30;
+}
+
+@utility outline-c1 {
+  @apply outline-gray-950/30 dark:outline-white/30;
+}
+
+@utility btn {
+  @apply py-2 px-4 rounded-md bg-gray-950 dark:bg-white text-white dark:text-gray-950 hover:opacity-90 hover:cursor-pointer;
 }
 
 html,
@@ -34,9 +60,12 @@ body {
 }
 
 .wrapper {
-  @apply flex h-screen flex-col;
+  @apply flex min-h-screen flex-col;
   main {
     @apply flex-grow;
+  }
+  aside {
+    @apply h-screen min-w-60;
   }
 }
 
@@ -67,6 +96,36 @@ body {
 
 a.pop {
   @apply flex items-center-safe justify-center space-x-2;
+}
+
+.pricetag {
+  @apply inline-flex text-nowrap text-base py-2 pl-7 pr-9 h-10 rounded-sm font-bold bg-gray-600 dark:bg-gray-400 text-white dark:text-gray-950 relative;
+
+  .triangle {
+    @apply absolute content-[''] bg-gray-600 dark:bg-gray-400 rotate-45 rounded-sm;
+
+    right: -12.25px;
+    top: 5px;
+    width: 28.5px;
+    height: 28.5px;
+  }
+
+  .hole {
+    @apply absolute content-[''] rounded-full w-2 h-2 top-4 -right-[1px] bg-white dark:bg-gray-950;
+  }
+}
+
+input,
+textarea {
+  @apply border border-c1 rounded-sm py-1 px-2.5;
+}
+
+input:read-only {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+hr.dashed {
+  @apply border-dashed border-t-1 border-c1;
 }
 
 @source "./routes";

@@ -3,23 +3,10 @@ import { twMerge } from "tailwind-merge";
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
-export const getVendor = (subname: string | undefined) => {
-  if (!subname) return "ENS";
-  if (subname === "base") {
-    return "Basenames";
-  }
-  return "ENS";
-};
-
-export const getClassBySubname = (subname: string, prefix = "bg") => {
-  if (subname === "base") {
-    return `${prefix}-basename${prefix === "shadow" ? "/20" : ""}`;
-  }
-  if (subname === "uni") {
-    return `${prefix}-uni${prefix === "shadow" ? "/20" : ""}`;
-  }
-  return `${prefix}-ens${prefix === "shadow" ? "/20" : ""}`;
-};
+export const shortAddr = (address: `0x${string}` | undefined, prefix = 8, suffix = 4) => {
+  if (!address) return ''
+  return `${address.substring(0, prefix + 1)}...${address.substring(address.length - suffix)}`
+}
 
 export const getImageUrl = (url: string | undefined) => {
   if (!url) return "";

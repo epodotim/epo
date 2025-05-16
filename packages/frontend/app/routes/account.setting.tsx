@@ -4,6 +4,8 @@ export function meta(_: Route.MetaArgs) {
   return [{ title: "Dashboard | EPO" }];
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function AccountSettingPage({
+  loaderData,
+}: Route.ComponentProps) {
   return <p>User Account Setting</p>;
 }

@@ -1,18 +1,23 @@
 import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
-import type { Route } from "./+types/account.posts.$postUid";
-import * as schema from "./../../db/schema";
+import * as schema from "db/schema";
 import { useParams, useLocation } from "react-router";
+import type { Route } from "./+types/account.posts.$postUid";
 
-import { v4 as uuidv4 } from 'uuid';
-import { useForm, getFormProps, getInputProps, getTextareaProps } from "@conform-to/react";
+import { v4 as uuidv4 } from "uuid";
+import {
+  useForm,
+  getFormProps,
+  getInputProps,
+  getTextareaProps,
+} from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
+import { AccountLayout } from "~/components/Layouts";
 
 export function meta(_: Route.MetaArgs) {
-  return [{ title: "Dashboard | EPO" }];
+  return [{ title: "Edit Post | EPO" }];
 }
-
 
 export async function action({ request, context, params }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -29,21 +34,22 @@ export async function action({ request, context, params }: Route.ActionArgs) {
 
   try {
     if (params.postUid === "new") {
-      // 新規登録
+      // new
       await context.db.insert(schema.post).values({
         ...data,
         uid: uuidv4(),
       });
     } else if (params.postUid) {
-      // 編集
-      await context.db.update(schema.post).set(data).where(eq(schema.post.uid, params.postUid));
+      // edit
+      await context.db
+        .update(schema.post)
+        .set(data)
+        .where(eq(schema.post.uid, params.postUid));
     } else {
-      // 不正なパス
       return { error: "Invalid postUid" };
     }
-    // 正常終了時は一覧ページへリダイレクト
     return redirect("/account/posts");
-  } catch (error) {
+  } catch (error: any) {
     return { errror: "Error adding to post" };
   }
 }
@@ -57,15 +63,12 @@ export async function loader({ context, params }: Route.ActionArgs) {
     },
   });
 
-  console.log("----- Dashboard Post ---", postUid, post);
-
   return {
     post,
   };
 }
 
-
-export default function DashboardPostEdit({
+export default function AccountPostEditPage({
   loaderData,
 }: Route.ComponentProps) {
   console.log("----- Dashboard Post ---", loaderData?.post);
@@ -74,16 +77,13 @@ export default function DashboardPostEdit({
 
   const isNewPost = location.pathname === "/account/posts/new";
 
-  // zodスキーマ定義
   const postSchema = z.object({
     title: z.string(),
     content: z.string(),
   });
 
-  // 投稿データ取得
   const post = loaderData?.post;
 
-  // conform useFormセットアップ
   const [form, fields] = useForm<{ title: string; content: string }>({
     id: "post-form",
     defaultValue: {
@@ -97,18 +97,21 @@ export default function DashboardPostEdit({
   });
 
   return (
-    <>
-      <form method="post" {...getFormProps(form)}>
-        <label htmlFor={fields.title.id}>Title</label>
-        <input
-          {...getInputProps(fields.title, { type: "text", id: fields.title.id })}
-        />
-        <label htmlFor={fields.content.id}>Content</label>
-        <textarea
-          {...getTextareaProps(fields.content)}
-        />
-        <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
-      </form>
-    </>
+    <AccountLayout title="Edit Post">
+      <div className="container mx-auto max-w-screen-sm">
+        <form method="post" {...getFormProps(form)}>
+          <label htmlFor={fields.title.id}>Title</label>
+          <input
+            {...getInputProps(fields.title, {
+              type: "text",
+              id: fields.title.id,
+            })}
+          />
+          <label htmlFor={fields.content.id}>Content</label>
+          <textarea {...getTextareaProps(fields.content)} />
+          <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
+        </form>
+      </div>
+    </AccountLayout>
   );
 }

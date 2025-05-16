@@ -1,9 +1,14 @@
-import type { Route } from "./+types/dashboard._index";
+import type { Route } from "./+types/account._index";
+import { AccountLayout } from "~/components/Layouts";
 
 export function meta(_: Route.MetaArgs) {
   return [{ title: "Dashboard | EPO" }];
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
-  return <p>User Account Home</p>;
+export default function AccountPage({ loaderData }: Route.ComponentProps) {
+  return (
+    <AccountLayout>
+      <p>User Account Home</p>
+    </AccountLayout>
+  );
 }

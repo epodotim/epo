@@ -1,6 +1,6 @@
 import { http, cookieStorage, createConfig, createStorage } from "wagmi";
 import { base, baseSepolia, mainnet, sepolia } from "wagmi/chains";
-import { coinbaseWallet } from "wagmi/connectors";
+import { coinbaseWallet, injected } from "wagmi/connectors";
 
 export const getWagmiConfig: (ENV: Env) => ReturnType<typeof createConfig> = (
   ENV: Env,
@@ -8,6 +8,7 @@ export const getWagmiConfig: (ENV: Env) => ReturnType<typeof createConfig> = (
   createConfig({
     chains: [mainnet, sepolia, base, baseSepolia],
     connectors: [
+      injected(),
       coinbaseWallet({
         appName: "EPO",
         appLogoUrl: "https://epo.im/logo.png",

@@ -9,6 +9,9 @@ import { useAccount } from "wagmi";
 import { Toaster } from "~/components/ui/Toaster";
 import { getWagmiConfig } from "~/lib/wagmi";
 import type { RootLoader } from "~/root";
+import { ClientOnly } from "remix-utils/client-only";
+import { useAtom } from "jotai";
+import { darkModeAtom } from "~/atoms";
 
 export function Loading() {
   return (
@@ -40,24 +43,28 @@ export function AppProviders({
             staleTime: 60 * 1000,
           },
         },
-      }),
+      })
   );
 
   return (
-    <WagmiProvider
-      config={wagmiConfig}
-      initialState={cookieToInitialState(wagmiConfig, ld?.cookie)}
-    >
-      <QueryClientProvider client={queryClient}>
-        <OnchainKitProvider
-          apiKey={ld?.ENV?.CDP_CLIENT_API_KEY}
-          chain={baseSepolia}
+    <ClientOnly>
+      {() => (
+        <WagmiProvider
+          config={wagmiConfig}
+          initialState={cookieToInitialState(wagmiConfig, ld?.cookie)}
         >
-          {children}
-          <Toaster />
-        </OnchainKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+          <QueryClientProvider client={queryClient}>
+            <OnchainKitProvider
+              apiKey={ld?.ENV?.CDP_CLIENT_API_KEY}
+              chain={baseSepolia}
+            >
+              {children}
+              <Toaster />
+            </OnchainKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      )}
+    </ClientOnly>
   );
 }
 
@@ -72,14 +79,40 @@ export function AppHandlers({
   pathname: string;
   isNavigating: boolean;
 }) {
+  const [darkMode] = useAtom(darkModeAtom);
   const { isConnected, isConnecting } = useAccount();
+
+  useEffect(() => {
+    const rootEl = window.document.documentElement;
+
+    if (darkMode === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
+      rootEl.classList.toggle("dark", systemTheme === "dark");
+    } else {
+      rootEl.classList.toggle("dark", darkMode === "dark");
+    }
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (darkMode === "system") {
+        rootEl.classList.toggle("dark", e.matches);
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [darkMode]);
 
   // redirect
   useEffect(() => {
-    if (pathname !== "/" && !isConnected) {
+    if (pathname.startsWith("/account") && !isConnected) {
       // navigate("/");
     }
-  }, [isConnected, pathname]);
+  }, [isConnected, pathname, navigate]);
 
   return <>{!ld || isNavigating || (isConnecting && <Loading />)}</>;
 }
