@@ -10,10 +10,13 @@ export const post = sqliteTable(
     uid: text().notNull(), // short UUID for post - `'73WakrfVbNJBaAmhQtEeDv'`
     author: text().notNull(), // owner name - `user.base.eth` or `user.epo.im`
     address: text(), // optioanal
-    label: text(),
+    label: text(), // category
     title: text(),
     content: text(),
-    preview: text(), // oprional: content preview
+    preview: text(), // oprional: content preview for paid contents
+    coverImg: text(), // optional: cover image url
+    price: integer(), // optional: price for paid contents
+    priceToken: text(), // optional: priceToken for paid contents
     createdAt: text().notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text().notNull().default(sql`CURRENT_TIMESTAMP`),
     publishedAt: text(),
