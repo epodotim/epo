@@ -1,4 +1,4 @@
-import { PostLayout } from "~/components/Layouts";
+import { BaseLayout } from "~/components/Layouts";
 import type { Route } from "./+types/p.$postUid";
 import x402Logo from "~/assets/x402-button-small.png";
 
@@ -30,7 +30,7 @@ export default function User({ loaderData }: Route.ComponentProps) {
   console.log("----- User ---", post);
 
   return (
-    <PostLayout
+    <BaseLayout
       renderHeader={
         <span className="flex items-center">
           <div className="mr-2 h-7 w-7 rounded-full bg-blue-600" />
@@ -73,6 +73,6 @@ export default function User({ loaderData }: Route.ComponentProps) {
           <div>Comments</div>
         </div>
       )}
-    </PostLayout>
+    </BaseLayout>
   );
 }

@@ -4,6 +4,7 @@ import Profile from "~/components/Profile";
 import type { Basename } from "~/lib/basename";
 import type { Route } from "./+types/$uid._index";
 import { Tabs } from "@base-ui-components/react/tabs";
+import useAttestations from "~/hooks/useAttestations";
 
 export function meta({ params }: Route.MetaArgs) {
   const uid = params?.uid ?? "A Profile on EPO";
@@ -50,6 +51,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 export default function User({ loaderData }: Route.ComponentProps) {
   const { uid } = useParams();
   console.log("----- User ---", loaderData);
+  const { data } = useAttestations();
 
   return (
     <BaseLayout>
