@@ -10,7 +10,7 @@ import { useForm, getFormProps, getInputProps } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
 import { AccountLayout } from "~/components/Layouts";
-import PaidToggle from "~/components/ui/PaidToggle";
+import { ToggleSelector } from "~/components/ui/ToggleSelector";
 import { useState } from "react";
 
 export function meta(_: Route.MetaArgs) {
@@ -22,7 +22,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
   const preview = formData.get("preview") as string;
-  const price = Number(formData.get("price"))
+  const price = Number(formData.get("price"));
 
   // 共通データ
   const data = {
@@ -113,11 +113,13 @@ export default function AccountPostEditPage({
   return (
     <AccountLayout title="Edit Post">
       <div className="container mx-auto max-w-screen-sm">
-        <PaidToggle
+        <ToggleSelector
           value={isPaid ? "paid" : "free"}
-          onChange={(val) => {
-            setIsPaid(val === "paid");
-          }}
+          onChange={(val) => setIsPaid(val === "paid")}
+          options={[
+            { label: "Free", value: "free", ariaLabel: "Free plan" },
+            { label: "Paid", value: "paid", ariaLabel: "Paid plan" },
+          ]}
         />
         <form
           method="post"
@@ -161,13 +163,10 @@ export default function AccountPostEditPage({
               />
             </>
           </div>
-          {/* <MarkdownEditor /> */}
           {isPaid && (
             <div className="flex flex-col">
               <label htmlFor={fields.price.id}>Price</label>
-              <input
-                {...getInputProps(fields.price, { type: "text" })}
-              />
+              <input {...getInputProps(fields.price, { type: "text" })} />
             </div>
           )}
           <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
