@@ -4,7 +4,7 @@ import * as schema from "db/schema";
 import { useParams, useLocation } from "react-router";
 import type { Route } from "./+types/account.posts.$postUid";
 
-import { v4 as uuidv4 } from "uuid";
+import shortUUID from "short-uuid";
 import {
   useForm,
   getFormProps,
@@ -37,7 +37,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
       // new
       await context.db.insert(schema.post).values({
         ...data,
-        uid: uuidv4(),
+        uid: shortUUID.generate(),
       });
     } else if (params.postUid) {
       // edit
