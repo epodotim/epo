@@ -110,7 +110,7 @@ export function AppHandlers({
   // redirect
   useEffect(() => {
     if (pathname.startsWith("/account") && !isConnected) {
-      navigate("/");
+      // navigate("/");
     }
   }, [isConnected, pathname, navigate]);
 
