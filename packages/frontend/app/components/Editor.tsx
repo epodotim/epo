@@ -1,55 +1,95 @@
 import '@mdxeditor/editor/style.css'
-import { useEffect, useState, Suspense, type ComponentType } from "react";
+import { useEffect, useState, Suspense, type ComponentType } from 'react'
 
-// MDXEditorの型を適切に定義 (もしあればライブラリの型定義を利用)
-// ここでは汎用的なComponentTypeを使用
-type MDXEditorType = ComponentType<{ markdown: string; [key: string]: unknown }>;
+type MDXEditorType = ComponentType<{
+  markdown: string
+  onChange?: (markdown: string) => void
+  plugins?: any[]
+  className?: string
+}>
 
 export function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) return null; // サーバーサイドでは何もレンダリングしない
-
-  return <>{children}</>;
+  const [isClient, setIsClient] = useState(false)
+  useEffect(() => setIsClient(true), [])
+  return isClient ? <>{children}</> : null
 }
 
 type EditorProps = {
-  markdown: string;
-  onChange: (value: string) => void;
-  className?: string;
-};
+  markdown: string
+  onChange: (value: string) => void
+  className?: string
+}
 
 export function Editor({ markdown, onChange, className }: EditorProps) {
-  const [EditorComponent, setEditorComponent] = useState<MDXEditorType | null>(null);
+  const [EditorComponent, setEditorComponent] = useState<MDXEditorType | null>(null)
+  const [plugins, setPlugins] = useState<any[] | null>(null)
 
   useEffect(() => {
-    import('@mdxeditor/editor')
-      .then(module => {
-        setEditorComponent(() => module.MDXEditor);
-      })
-      .catch(err => {
-        console.error("Failed to load MDXEditor", err);
-      });
-  }, []);
+    const loadEditor = async () => {
+      try {
+        const {
+          MDXEditor,
+          toolbarPlugin,
+          headingsPlugin,
+          listsPlugin,
+          quotePlugin,
+          linkPlugin,
+          markdownShortcutPlugin,
+          codeBlockPlugin,
+          tablePlugin,
+          BoldItalicUnderlineToggles,
+          CreateLink,
+          InsertTable,
+          ListsToggle,
+          Separator,
+          UndoRedo,
+        } = await import('@mdxeditor/editor')
 
-  // MDXEditorのonChangeイベント名は仮にonChangeとする（実際のAPIに合わせて修正要）
+        setEditorComponent(() => MDXEditor)
+        setPlugins([
+          toolbarPlugin({
+            toolbarContents: () => (
+              <>
+                <UndoRedo />
+                <Separator />
+                <BoldItalicUnderlineToggles />
+                <ListsToggle />
+                <Separator />
+                <CreateLink />
+                <InsertTable />
+              </>
+            ),
+          }),
+          headingsPlugin(),
+          listsPlugin(),
+          quotePlugin(),
+          linkPlugin(),
+          markdownShortcutPlugin(),
+          codeBlockPlugin(),
+          tablePlugin(),
+        ])
+      } catch (err) {
+        console.error('Failed to load MDXEditor', err)
+      }
+    }
+
+    loadEditor()
+  }, [])
+
   return (
     <ClientOnly>
       <Suspense fallback={<div>Loading editor...</div>}>
-        {EditorComponent ? (
+        {EditorComponent && plugins ? (
           <EditorComponent
             markdown={markdown}
             onChange={onChange}
-            className={`dark-theme dark-editor ${className ?? "text-white"}`}
+            plugins={plugins}
+            className={`dark-theme dark-editor ${className ?? 'text-white'}`}
           />
         ) : (
           <div>Loading editor component...</div>
         )}
       </Suspense>
     </ClientOnly>
-  );
+  )
 }
