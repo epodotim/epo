@@ -22,6 +22,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
   const preview = formData.get("preview") as string;
+  const coverImg = formData.get("coverImg") as string;
   const price = Number(formData.get("price"));
 
   // 共通データ
@@ -30,6 +31,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
     content,
     preview,
     price: price > 0 ? price : null,
+    coverImg,
     author: "user123",
   };
 
@@ -75,6 +77,7 @@ const postSchema = z.object({
   content: z.string(),
   preview: z.string().optional(),
   price: z.number().optional(),
+  coverImg: z.string().optional(),
 });
 type PostFormType = z.infer<typeof postSchema>;
 
@@ -94,6 +97,7 @@ export default function AccountPostEditPage({
       content: isNewPost ? "" : (post?.content ?? ""),
       preview: isNewPost ? "" : (post?.preview ?? ""),
       price: isNewPost ? 0 : (post?.price ?? 0),
+      coverImg: isNewPost ? "" : (post?.coverImg ?? ""),
     },
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: postSchema });
@@ -167,6 +171,10 @@ export default function AccountPostEditPage({
                 className="border border-c2"
               />
             </>
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor={fields.coverImg.id}>Cover image</label>
+            <input {...getInputProps(fields.coverImg, { type: "text" })} className="border boder-c2"/>
           </div>
           {isPaid && (
             <div className="flex flex-col">
