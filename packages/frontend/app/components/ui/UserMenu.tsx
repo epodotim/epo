@@ -1,8 +1,15 @@
-import Menu from "~/components/ui/Menu";
-import { UserCircle, SignIn, SignOut } from "@phosphor-icons/react";
+import Menu, { MenuItem } from "~/components/ui/Menu";
+import {
+  UserCircle,
+  SignIn,
+  SignOut,
+  FilePlus,
+  Files,
+} from "@phosphor-icons/react";
 import { useAccount, useDisconnect, useConnect } from "wagmi";
-import { shortAddr } from "~/lib/utils";
+import { shortAddr, cn } from "~/lib/utils";
 import FaceIdIcon from "~/components/icons/FaceId";
+import { Link } from "react-router";
 
 const SignupModal = () => {
   const { connect, connectors } = useConnect();
@@ -43,29 +50,69 @@ const SignupModal = () => {
   );
 };
 
+const MENUS = [
+  {
+    id: "account",
+    icon: <UserCircle size={22} />,
+    text: "Account",
+    href: "/account",
+  },
+  {
+    id: "myPosts",
+    icon: <Files size={22} />,
+    text: "My Posts",
+    href: "/account/posts",
+  },
+  {
+    id: "newPost",
+    icon: <FilePlus size={22} />,
+    text: "New Post",
+    href: "/account/posts/new",
+  },
+];
+
 const SignedinModal = () => {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
 
   return (
-    <div className="flex flex-col gap-2.5 p-4">
-      <div className="text-center">xxx.base.eth</div>
-      <input
-        type="text"
-        className="w-full font-sm"
-        readOnly
-        value={shortAddr(address)}
-      />
-      <button
-        type="button"
-        className="btn flex w-full min-w-40 items-center justify-center space-x-1.5 font-bold text-sm"
-        onClick={() => {
-          disconnect();
-        }}
-      >
-        <SignOut size={22} />
-        Disconnect
-      </button>
+    <div className="flex flex-col">
+      <div className="text-center border-b border-c2 py-3">xxx.base.eth</div>
+      <div className="border-c2 border-b">
+        {MENUS.map(({ id, icon, text, href }) => (
+          <MenuItem className="hover:cursor-pointer" key={id}>
+            <Link
+              to={href}
+              className={cn(
+                "hover-bg-c1 flex w-full min-w-40 items-center px-4 py-2 hover:cursor-pointer"
+              )}
+            >
+              <span className="mr-2">{icon}</span>
+              <span className="text-sm">{text}</span>
+            </Link>
+          </MenuItem>
+        ))}
+      </div>
+      <div className="px-4 py-4">
+        <input
+          type="text"
+          className="w-full font-sm"
+          readOnly
+          value={shortAddr(address)}
+        />
+      </div>
+      <div className="px-4 pb-4">
+        <button
+          type="button"
+          className="btn flex w-full min-w-40 items-center justify-center space-x-1.5 font-bold text-sm"
+          onClick={() => {
+            disconnect();
+          }}
+        >
+          <SignOut size={22} />
+          Disconnect
+        </button>
+      </div>
     </div>
   );
 };

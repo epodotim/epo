@@ -109,10 +109,10 @@ export function AppHandlers({
 
   // redirect
   useEffect(() => {
-    if (pathname !== "/" && !isConnected) {
-      // navigate("/");
+    if (pathname.startsWith("/account") && !isConnected) {
+      navigate("/");
     }
-  }, [isConnected, pathname]);
+  }, [isConnected, pathname, navigate]);
 
   return <>{!ld || isNavigating || (isConnecting && <Loading />)}</>;
 }

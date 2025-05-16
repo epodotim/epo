@@ -70,6 +70,7 @@ export async function loader({ context, params }: Route.ActionArgs) {
 export default function AccountPostEditPage({
   loaderData,
 }: Route.ComponentProps) {
+  console.log("----- Dashboard Post ---", loaderData?.post);
   const { postUid } = useParams();
   const location = useLocation();
 
