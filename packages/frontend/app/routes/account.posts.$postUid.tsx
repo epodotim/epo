@@ -13,9 +13,10 @@ import {
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
+import { AccountLayout } from "~/components/Layouts";
 
 export function meta(_: Route.MetaArgs) {
-  return [{ title: "Dashboard | EPO" }];
+  return [{ title: "Edit Post | EPO" }];
 }
 
 export async function action({ request, context, params }: Route.ActionArgs) {
@@ -96,19 +97,21 @@ export default function AccountPostEditPage({
   });
 
   return (
-    <>
-      <form method="post" {...getFormProps(form)}>
-        <label htmlFor={fields.title.id}>Title</label>
-        <input
-          {...getInputProps(fields.title, {
-            type: "text",
-            id: fields.title.id,
-          })}
-        />
-        <label htmlFor={fields.content.id}>Content</label>
-        <textarea {...getTextareaProps(fields.content)} />
-        <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
-      </form>
-    </>
+    <AccountLayout title="Edit Post">
+      <div className="container mx-auto max-w-screen-sm">
+        <form method="post" {...getFormProps(form)}>
+          <label htmlFor={fields.title.id}>Title</label>
+          <input
+            {...getInputProps(fields.title, {
+              type: "text",
+              id: fields.title.id,
+            })}
+          />
+          <label htmlFor={fields.content.id}>Content</label>
+          <textarea {...getTextareaProps(fields.content)} />
+          <button type="submit">{isNewPost ? "Submit" : "更新"}</button>
+        </form>
+      </div>
+    </AccountLayout>
   );
 }

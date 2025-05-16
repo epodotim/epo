@@ -60,9 +60,12 @@ body {
 }
 
 .wrapper {
-  @apply flex h-screen flex-col;
+  @apply flex min-h-screen flex-col;
   main {
     @apply flex-grow;
+  }
+  aside {
+    @apply h-screen min-w-60;
   }
 }
 

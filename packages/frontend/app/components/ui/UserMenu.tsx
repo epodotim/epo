@@ -50,7 +50,7 @@ const SignupModal = () => {
   );
 };
 
-const MENUS = [
+export const SIDE_MENUS = [
   {
     id: "account",
     icon: <UserCircle size={22} />,
@@ -77,9 +77,9 @@ const SignedinModal = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="text-center border-b border-c2 py-3">xxx.base.eth</div>
+      <div className="border-c2 border-b py-3 text-center">xxx.base.eth</div>
       <div className="border-c2 border-b">
-        {MENUS.map(({ id, icon, text, href }) => (
+        {SIDE_MENUS.map(({ id, icon, text, href }) => (
           <MenuItem className="hover:cursor-pointer" key={id}>
             <Link
               to={href}
