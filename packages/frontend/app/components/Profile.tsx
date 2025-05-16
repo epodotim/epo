@@ -202,7 +202,7 @@ const Keywords = ({ keywords }: any) => (
     {keywords.split(",").map((keyword: string) => (
       <li
         key={keyword.toLowerCase()}
-        className="my-1 mr-2 inline-flex items-center justify-center rounded-xl border-2 border-c1 px-3 py-1 text-sm"
+        className="my-1 mr-2 inline-flex items-center justify-center rounded-xl border-2 border-c2 px-3 py-1 text-sm"
       >
         {keyword}
       </li>

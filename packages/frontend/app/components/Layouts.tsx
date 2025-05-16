@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import Logo from "~/components/icons/EPO";
 import DarkmodeMenu from "~/components/ui/DarkmodeMenu";
+import UserMenu from "~/components/ui/UserMenu";
 
 export function BaseLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,9 +22,12 @@ export function PostLayout({
 }) {
   return (
     <div className="wrapper">
-      <header className="content sticky top-0 flex h-12 min-h-12 items-center justify-between border-b px-4 backdrop-blur-xs">
+      <header className="sticky top-0 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu">
         {renderHeader ?? <span />}
-        <DarkmodeMenu />
+        <div className="flex items-center gap-2">
+          <DarkmodeMenu />
+          <UserMenu />
+        </div>
       </header>
       <main>{children}</main>
       <Footer />

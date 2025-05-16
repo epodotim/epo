@@ -1,5 +1,6 @@
 import { PostLayout } from "~/components/Layouts";
 import type { Route } from "./+types/p.$postUid";
+import x402Logo from "~/assets/x402-button-small.png";
 
 export async function loader({ context, params }: Route.LoaderArgs) {
   const postUid = params?.postUid;
@@ -33,7 +34,8 @@ export default function User({ loaderData }: Route.ComponentProps) {
       renderHeader={
         <span className="flex items-center">
           <div className="mr-2 h-7 w-7 rounded-full bg-blue-600" />
-          {post?.author}
+          <strong>xxxxx</strong>
+          <span className="opacity-80">.epo.im</span>
         </span>
       }
     >
@@ -54,6 +56,21 @@ export default function User({ loaderData }: Route.ComponentProps) {
               sunt in culpa qui officia deserunt mollit anim id est laborum."
             </p>
           </div>
+          <div className="flex items-center justify-between border-c1 border-t border-b border-dashed p-4">
+            <span className="pricetag">
+              $15
+              <span className="triangle" />
+              <span className="hole" />
+            </span>
+            <button className="underline" type="button">
+              Unlock this content
+              <img src={x402Logo} width={120} alt="x402" />
+            </button>
+          </div>
+          <div className="flex items-center justify-between border-c1 border-b border-dashed p-4">
+            .....
+          </div>
+          <div>Comments</div>
         </div>
       )}
     </PostLayout>
