@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { useAttestations } from "~/hooks/useAttestations";
+import { MarkdownPreview } from "~/components/MarkdownPreview";
 
 export async function loader({ context, params }: Route.LoaderArgs) {
   const postUid = params?.postUid;
@@ -61,7 +62,9 @@ export default function User({ loaderData }: Route.ComponentProps) {
           </div>
           {post?.price && post?.price > 0 ? (
             <>
-              <div className="px-4 py-8">{post.preview}</div>
+              <div className="px-4 py-8">
+                <MarkdownPreview markdown={post?.preview ?? ''} />
+              </div>
               <div className="flex items-center justify-between border-c1 border-t border-b border-dashed p-4">
                 <span className="pricetag">
                   $ {post.price}
@@ -75,7 +78,9 @@ export default function User({ loaderData }: Route.ComponentProps) {
               </div>
             </>
           ) : (
-            <div className="border-c1 border-b px-4 py-8">{post.content}</div>
+            <div className="border-c1 border-b px-4 py-8">
+              <MarkdownPreview markdown={post?.content ?? ''} />
+            </div>
           )}
           <div className="pt-16">
             <div className="flex items-center gap-2 border-c1 border-b px-4 py-2">
