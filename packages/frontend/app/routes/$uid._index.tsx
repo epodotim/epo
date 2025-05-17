@@ -169,7 +169,7 @@ export default function User({ loaderData }: Route.ComponentProps) {
                       </div>
                       <a
                         className="absolute top-2 right-2 flex items-center"
-                        href={`https://base-sepolia.easscan.org/attestation/view/${item.id}`}
+                        href={`https://base.easscan.org/attestation/view/${item.id}`}
                         target="_blank"
                         rel="noreferrer"
                       >

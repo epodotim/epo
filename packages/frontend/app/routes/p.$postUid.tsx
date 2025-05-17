@@ -12,6 +12,11 @@ import { Link } from "react-router";
 import { useAttestations } from "~/hooks/useAttestations";
 import { MarkdownPreview } from "~/components/MarkdownPreview";
 import Avatar from "~/components/Avatar";
+import AttestConfirmDialog from "~/components/AttestForm";
+import { useState } from "react";
+import { useAccount } from "wagmi";
+import { base } from "viem/chains";
+import { useName } from "@coinbase/onchainkit/identity";
 
 export async function loader({ context, params }: Route.LoaderArgs) {
   const postUid = params?.postUid;
@@ -41,6 +46,11 @@ export default function Post({ loaderData }: Route.ComponentProps) {
   const { data: attests } = useAttestations(
     `${window.location.origin}/p/${post?.uid}`
   );
+  const { address } = useAccount();
+  const { data: basename } = useName({ address, chain: base });
+
+  const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
+
   console.log("----- Post ---", post, attests);
 
   const isPurchased = false;
@@ -75,7 +85,7 @@ export default function Post({ loaderData }: Route.ComponentProps) {
                     <span className="triangle" />
                     <span className="hole" />
                   </span>
-                  <button className="underline" type="button">
+                  <button className="text-right underline" type="button">
                     Unlock this content
                     <img src={x402Logo} width={120} alt="x402" />
                   </button>
@@ -100,9 +110,25 @@ export default function Post({ loaderData }: Route.ComponentProps) {
             </div>
           )}
           <div className="pt-16">
-            <div className="flex items-center gap-2 border-c1 border-b px-4 py-2">
-              <UserList size={24} />
-              Attestations
+            <div className="flex items-center justify-between border-c1 border-b px-4 py-2">
+              <div className="flex items-center gap-2">
+                <UserList size={24} />
+                Attestations
+              </div>
+              <button
+                className="btn px-4 py-1 text-sm"
+                type="button"
+                onClick={() => setConfirmOpen(true)}
+              >
+                Attest
+              </button>
+              <AttestConfirmDialog
+                postUid={post?.uid}
+                attesterName={basename ?? ""}
+                recipientName={post?.author}
+                confirmOpen={confirmOpen}
+                setConfirmOpen={setConfirmOpen}
+              />
             </div>
             {attests && attests.length > 0 ? (
               <ul className="flex w-full flex-col">
@@ -132,7 +158,7 @@ export default function Post({ loaderData }: Route.ComponentProps) {
                     </div>
                     <a
                       className="absolute top-2 right-2 flex items-center"
-                      href={`https://base-sepolia.easscan.org/attestation/view/${item.id}`}
+                      href={`https://base.easscan.org/attestation/view/${item.id}`}
                       target="_blank"
                       rel="noreferrer"
                     >

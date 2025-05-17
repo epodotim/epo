@@ -24,3 +24,8 @@ export const parseName = (
   const subname = parts.length > 2 ? parts[1] : "";
   return { id, subname };
 };
+
+export const isStandalone = () =>
+  typeof window !== "undefined" &&
+  (window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true);

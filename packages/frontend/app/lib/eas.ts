@@ -21,7 +21,19 @@ export const attest = async (signer: any, data: any) => {
     { name: "message", value: data.message, type: "string" },
   ]);
 
-  const tx = await eas.attest({
+  // const tx = await eas.attest({
+  //   schema: EAS_SCHEMA_ADDRESS,
+  //   data: {
+  //     recipient: data.recipient,
+  //     expirationTime: NO_EXPIRATION,
+  //     revocable: true,
+  //     data: encodedData,
+  //   },
+  // });
+
+  // const uid = await tx.wait();
+
+  return {
     schema: EAS_SCHEMA_ADDRESS,
     data: {
       recipient: data.recipient,
@@ -29,11 +41,5 @@ export const attest = async (signer: any, data: any) => {
       revocable: true,
       data: encodedData,
     },
-  });
-
-  const uid = await tx.wait();
-
-  return {
-    uid,
   };
 };
