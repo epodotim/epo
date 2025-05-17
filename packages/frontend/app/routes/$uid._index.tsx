@@ -4,7 +4,14 @@ import Profile from "~/components/Profile";
 import type { Basename } from "~/lib/basename";
 import type { Route } from "./+types/$uid._index";
 import { Tabs } from "@base-ui-components/react/tabs";
-import useAttestations from "~/hooks/useAttestations";
+import { useAttestations } from "~/hooks/useAttestations";
+import {
+  LinkSimple,
+  Clock,
+  ChatTeardropDots,
+  ArrowUpRight,
+} from "@phosphor-icons/react";
+import { Link } from "react-router";
 
 export function meta({ params }: Route.MetaArgs) {
   const uid = params?.uid ?? "A Profile on EPO";
@@ -12,7 +19,7 @@ export function meta({ params }: Route.MetaArgs) {
   return [{ title: uid }];
 }
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ context, params }: Route.LoaderArgs) {
   const uid = params?.uid as Basename;
   // const location = await getBasenameTextRecord(uid, "location");
   // const url2 = await getBasenameTextRecord(uid, "url2");
@@ -27,6 +34,15 @@ export async function loader({ params }: Route.LoaderArgs) {
   //     url3,
   //   },
   // };
+
+  const posts = await context.db.query.post.findMany({
+    where: (post, { isNotNull, eq, and }) =>
+      and(isNotNull(post.publishedAt), eq(post.author, uid)),
+    with: {
+      post_meta: true,
+    },
+    orderBy: (post, { desc }) => [desc(post.publishedAt)],
+  });
 
   return {
     uid: "yujiym.base.eth",
@@ -45,13 +61,14 @@ export async function loader({ params }: Route.LoaderArgs) {
       location: "Japan",
       url3: "",
     },
+    posts,
   };
 }
 
 export default function User({ loaderData }: Route.ComponentProps) {
   const { uid } = useParams();
-  console.log("----- User ---", loaderData);
-  const { data } = useAttestations();
+  const { data: attests } = useAttestations(uid);
+  const posts = loaderData?.posts;
 
   return (
     <BaseLayout>
@@ -62,33 +79,94 @@ export default function User({ loaderData }: Route.ComponentProps) {
             <Tabs.List className="relative z-0 flex gap-4 border-c2 border-b-2">
               <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="posts">
                 Posts
-                <span className="pill">3</span>
+                {posts && posts.length > 0 && (
+                  <span className="pill">{posts.length}</span>
+                )}
               </Tabs.Tab>
               <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="attestations">
-                Attestions<span className="pill">0</span>
-              </Tabs.Tab>
-              <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="recieved">
-                Recieved<span className="pill">1</span>
+                Attestions
+                {attests && attests.length > 0 && (
+                  <span className="pill">{attests.length}</span>
+                )}
               </Tabs.Tab>
               <Tabs.Indicator className="-bottom-0.5 absolute z-[-1] w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] border-c1 border-b-2 transition-all duration-200 ease-in-out" />
             </Tabs.List>
-            <Tabs.Panel
-              className="relative flex h-32 items-center justify-center"
-              value="posts"
-            >
-              <p className="opacity-70">No posts yet</p>
+            <Tabs.Panel className="relative" value="posts">
+              {attests && attests.length > 0 ? (
+                <ul className="flex w-full flex-col">
+                  {posts.map((post) => (
+                    <li
+                      key={post.uid}
+                      className="relative min-h-18 border-c1 border-b px-3 py-4"
+                    >
+                      <Link to={`/p/${post.uid}`}>
+                        <h4 className="block py-3">{post.title}</h4>
+                        <span className="absolute right-2 bottom-2 flex items-center gap-1 text-xs opacity-70">
+                          <Clock size={18} />
+                          {new Date(String(post.publishedAt)).toLocaleString()}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="opacity-70">No posts yet</p>
+              )}
             </Tabs.Panel>
-            <Tabs.Panel
-              className="relative flex h-32 items-center justify-center"
-              value="attestations"
-            >
-              <p className="opacity-70">No attestations yet</p>
-            </Tabs.Panel>
-            <Tabs.Panel
-              className="relative flex h-32 items-center justify-center"
-              value="recieved"
-            >
-              <p className="opacity-70">No recieved attestations yet</p>
+            <Tabs.Panel className="relative" value="attestations">
+              {attests && attests.length > 0 ? (
+                <ul className="flex w-full flex-col">
+                  {attests.map((item) => (
+                    <li
+                      key={item.id}
+                      className="relative min-h-18 border-c1 border-b px-4 py-3"
+                    >
+                      <div className="flex items-center gap-4 py-3">
+                        <div className="flex items-center">
+                          <div className="mr-2 h-8 w-8 rounded-full bg-accent" />
+                          <span className="text-sm">{item.attesterName}</span>
+                        </div>
+                        <div className="opacity-70">&rarr;</div>
+                        <div className="flex items-center">
+                          <div className="mr-2 h-8 w-8 rounded-full bg-accent" />
+                          <span className="text-sm">{item.recipientName}</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-start">
+                        {item?.url && (
+                          <Link
+                            to={item.url}
+                            className="mt-2 flex items-center gap-1 px-0.5 text-xs"
+                          >
+                            <LinkSimple size={18} />
+                            <span>{item.url}</span>
+                          </Link>
+                        )}
+                        {item?.message && (
+                          <div className="mt-2 flex items-start gap-1 rounded-lg bg-c1 py-1.5 pr-6 pl-4 text-xs">
+                            <ChatTeardropDots size={18} />
+                            <p>{item.message}</p>
+                          </div>
+                        )}
+                      </div>
+                      <a
+                        className="absolute top-2 right-2 flex items-center"
+                        href={`https://base-sepolia.easscan.org/attestation/view/${item.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <ArrowUpRight size={22} />
+                      </a>
+                      <span className="absolute right-2 bottom-2 flex items-center gap-1 text-xs opacity-70">
+                        <Clock size={18} />
+                        {new Date(item.timeCreated * 1_000).toLocaleString()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="opacity-70">No attests yet</p>
+              )}
             </Tabs.Panel>
           </Tabs.Root>
         </div>

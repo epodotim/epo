@@ -1,54 +1,45 @@
 import { useQuery } from "@tanstack/react-query";
-import { orderBy } from "es-toolkit";
 import { gql, request } from "graphql-request";
 import { EAS_SCHEMA_ADDRESS } from "~/lib/eas";
 
-export function useAttestations(address: string) {
-  const { data } = useQuery({
-    queryKey: ["AttestationsQuery", EAS_SCHEMA_ADDRESS, address],
+export function useAttestations(search: string) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["AttestationsQuery", EAS_SCHEMA_ADDRESS, search],
     queryFn: async () =>
       request("https://base-sepolia.easscan.org/graphql", AttestationsQuery, {
-        id: EAS_SCHEMA_ADDRESS,
+        schemaId: EAS_SCHEMA_ADDRESS,
+        search,
       }),
   });
 
   return {
-    data: orderBy(data?.schema?.attestations ?? [], ["timeCreated"], ["desc"]),
+    isLoading,
+    data:
+      data?.attestations?.map((attestation) => {
+        const decoded = JSON.parse(attestation.decodedDataJson);
+        const dataJson = decoded.reduce((acc: any, item: any) => {
+          acc[item.name] = item.value.value;
+          return acc;
+        }, {} as any);
+
+        return {
+          ...attestation,
+          ...dataJson,
+          decodedDataJson: decoded,
+        };
+      }) ?? [],
   };
 }
 
 export const AttestationsQuery = gql`
-  query Attestation($id: String!) {
-    schema(where: { id: $id }) {
-      id
-      attestations {
-        attester
-        data
-        id
-        decodedDataJson
-        recipient
-        time
-        timeCreated
-        expirationTime
-        revocationTime
-        refUID
-        revocable
-        revoked
-        txid
-        schemaId
-        ipfsHash
-        isOffchain
+  query Attestations($schemaId: String!, $search: String!) {
+    attestations(
+      where: {
+        schemaId: { equals: $schemaId }
+        decodedDataJson: { contains: $search }
       }
-      revocable
-      time
-      schema
-    }
-  }
-`;
-
-export const AttestationQuery = gql`
-  query Attestation($id: String!) {
-    attestation(where: { id: $id }) {
+      orderBy: { timeCreated: desc }
+    ) {
       attester
       data
       id

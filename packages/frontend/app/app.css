@@ -23,7 +23,11 @@
 }
 
 @utility content-menu {
-  @apply bg-white/70 text-black dark:bg-gray-950/70 dark:text-white backdrop-blur-sm;
+  @apply bg-gray-200/70 text-black dark:bg-gray-950/70 dark:text-white backdrop-blur-sm;
+}
+
+@utility bg-c1 {
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 @utility hover-bg-c1 {
