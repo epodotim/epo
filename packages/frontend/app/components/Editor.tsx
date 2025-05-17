@@ -2,8 +2,22 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 import { Markdown } from "tiptap-markdown";
+import {
+  BracketsAngle,
+  TextHTwo,
+  TextHThree,
+  TextHFour,
+  TextItalic,
+  TextBolder,
+  TextUnderline,
+  TextStrikethrough,
+  ListNumbers,
+  ListBullets,
+  LinkSimple,
+  LinkBreak,
+  Quotes,
+} from "@phosphor-icons/react";
 
-// 必要な拡張（StarterKit には含まれていないもの）
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 
@@ -45,37 +59,28 @@ export const MarkdownEditor = ({ markdown, onChange, className }: Props) => {
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={btnClass(editor.isActive("bold"))}
         >
-          B
+          <TextBolder size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={btnClass(editor.isActive("italic"))}
         >
-          I
+          <TextItalic size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={btnClass(editor.isActive("underline"))}
         >
-          U
+          <TextUnderline size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={btnClass(editor.isActive("strike"))}
         >
-          S
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          className={btnClass(editor.isActive("heading", { level: 1 }))}
-        >
-          H1
+          <TextStrikethrough size={20} />
         </button>
         <button
           type="button"
@@ -84,7 +89,7 @@ export const MarkdownEditor = ({ markdown, onChange, className }: Props) => {
           }
           className={btnClass(editor.isActive("heading", { level: 2 }))}
         >
-          H2
+          <TextHTwo size={20} />
         </button>
         <button
           type="button"
@@ -93,35 +98,44 @@ export const MarkdownEditor = ({ markdown, onChange, className }: Props) => {
           }
           className={btnClass(editor.isActive("heading", { level: 3 }))}
         >
-          H3
+          <TextHThree size={20} />
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 4 }).run()
+          }
+          className={btnClass(editor.isActive("heading", { level: 4 }))}
+        >
+          <TextHFour size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={btnClass(editor.isActive("bulletList"))}
         >
-          Bullet List
+          <ListBullets size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={btnClass(editor.isActive("orderedList"))}
         >
-          Ordered List
+          <ListNumbers size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={btnClass(editor.isActive("codeBlock"))}
         >
-          Code
+          <BracketsAngle size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={btnClass(editor.isActive("blockquote"))}
         >
-          ❝
+          <Quotes size={20} />
         </button>
         <button
           type="button"
@@ -133,21 +147,21 @@ export const MarkdownEditor = ({ markdown, onChange, className }: Props) => {
           }}
           className={btnClass(editor.isActive("link"))}
         >
-          🔗
+          <LinkSimple size={20} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().unsetLink().run()}
           className={btnClass(false)}
         >
-          ❌🔗
+          <LinkBreak size={20} />
         </button>
       </div>
 
       {/* Editor */}
       <EditorContent
         editor={editor}
-        className={`border p-2 rounded h-full min-h-60 focus:outline-none focus:ring-0 ${className}`}
+        className={`h-full min-h-60 rounded border p-2 focus:outline-none focus:ring-0 ${className}`}
       />
     </div>
   );
