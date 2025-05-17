@@ -154,3 +154,8 @@ hr.dashed {
 
 @source "./routes";
 @source "./components";
+
+.ProseMirror:focus {
+  outline: none;
+  box-shadow: none;
+}
