@@ -1,4 +1,4 @@
-import { parseName } from "~/lib/ens";
+import { parseName } from "~/lib/utils";
 
 export default function StyledName({ fullname }: { fullname: string }) {
   const { id, subname } = parseName(fullname);
