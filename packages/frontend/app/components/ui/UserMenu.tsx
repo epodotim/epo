@@ -10,9 +10,10 @@ import { useAccount, useDisconnect, useConnect } from "wagmi";
 import { shortAddr, cn } from "~/lib/utils";
 import FaceIdIcon from "~/components/icons/FaceId";
 import { Link } from "react-router";
-import { useName, useAvatar } from "@coinbase/onchainkit/identity";
+import { useName } from "@coinbase/onchainkit/identity";
 import { base } from "viem/chains";
 import StyledName from "~/components/StyledName";
+import Avatar from "~/components/Avatar";
 
 const SignupModal = () => {
   const { connect, connectors } = useConnect();
@@ -78,18 +79,11 @@ const SignedinModal = () => {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const { data: basename } = useName({ address, chain: base });
-  const { data: baseAvatar } = useAvatar({ ensName: basename });
 
   return (
     <div className="flex flex-col">
       <div className="-ml-2 flex items-center justify-center gap-1.5 border-c2 border-b py-3 text-center">
-        {baseAvatar && (
-          <img
-            src={baseAvatar ?? ""}
-            className="h-6 w-6 rounded-full"
-            alt={basename ?? ""}
-          />
-        )}
+        <Avatar fullname={basename ?? ""} />
         <StyledName fullname={basename ?? ""} />
       </div>
       <div className="border-c2 border-b">
@@ -133,9 +127,18 @@ const SignedinModal = () => {
 
 export default function CustomMenu() {
   const { address } = useAccount();
+  const { data: basename } = useName({ address, chain: base });
 
   return (
-    <Menu renderTrigger={<UserCircle size={22} />}>
+    <Menu
+      renderTrigger={
+        !address ? (
+          <UserCircle size={22} />
+        ) : (
+          <Avatar fullname={basename ?? ""} />
+        )
+      }
+    >
       {!address ? <SignupModal /> : <SignedinModal />}
     </Menu>
   );

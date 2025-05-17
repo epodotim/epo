@@ -11,6 +11,7 @@ import {
 import { Link } from "react-router";
 import { useAttestations } from "~/hooks/useAttestations";
 import { MarkdownPreview } from "~/components/MarkdownPreview";
+import Avatar from "~/components/Avatar";
 
 export async function loader({ context, params }: Route.LoaderArgs) {
   const postUid = params?.postUid;
@@ -35,51 +36,67 @@ export function meta({ data }: Route.MetaArgs) {
   return [{ title }];
 }
 
-export default function User({ loaderData }: Route.ComponentProps) {
+export default function Post({ loaderData }: Route.ComponentProps) {
   const post = loaderData?.post;
   const { data: attests } = useAttestations(
     `${window.location.origin}/p/${post?.uid}`
   );
   console.log("----- Post ---", post, attests);
 
+  const isPurchased = false;
+
   return (
     <BaseLayout
       renderHeader={
-        <span className="flex items-center">
-          <div className="mr-2 h-7 w-7 rounded-full bg-blue-600" />
+        <Link to={`/${post?.author}`} className="flex items-center">
+          <Avatar fullname={post?.author ?? ""} className="mr-2 h-7 w-7" />
           <StyledName fullname={post?.author ?? ""} />
-        </span>
+        </Link>
       }
     >
       {post && (
         <div className="container mx-auto max-w-screen-sm">
           <div className="relative flex w-full border-c1 border-b">
-            <h1 className="px-4 pt-8 pb-6 text-xl">{post?.title}</h1>
+            <h1 className="px-4 pt-8 pb-6 font-bold text-2xl">{post?.title}</h1>
             <span className="absolute right-2 bottom-2 flex items-center gap-1 text-right text-xs opacity-70">
               <Clock size={18} />
               {new Date(String(post.publishedAt)).toLocaleString()}
             </span>
           </div>
           {post?.price && post?.price > 0 ? (
-            <>
-              <div className="px-4 py-8">
-                <MarkdownPreview markdown={post?.preview ?? ''} />
-              </div>
-              <div className="flex items-center justify-between border-c1 border-t border-b border-dashed p-4">
-                <span className="pricetag">
-                  $ {post.price}
-                  <span className="triangle" />
-                  <span className="hole" />
-                </span>
-                <button className="underline" type="button">
-                  Unlock this content
-                  <img src={x402Logo} width={120} alt="x402" />
-                </button>
-              </div>
-            </>
+            !isPurchased ? (
+              <>
+                <div className="md border-b border-dashed px-4 py-8">
+                  <MarkdownPreview markdown={post?.preview ?? ""} />
+                </div>
+                <div className="flex items-center justify-between border-c1 border-b p-4">
+                  <span className="pricetag">
+                    $ {post.price}
+                    <span className="triangle" />
+                    <span className="hole" />
+                  </span>
+                  <button className="underline" type="button">
+                    Unlock this content
+                    <img src={x402Logo} width={120} alt="x402" />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="md border-b border-dashed px-4 py-8">
+                  <MarkdownPreview markdown={post?.preview ?? ""} />
+                </div>
+                <div className="border-b border-dashed py-10 text-center text-lg opacity-70">
+                  Thanks for your purchase! 🎉
+                </div>
+                <div className="md border-c1 border-b px-4 py-8">
+                  <MarkdownPreview markdown={post?.content ?? ""} />
+                </div>
+              </>
+            )
           ) : (
-            <div className="border-c1 border-b px-4 py-8">
-              <MarkdownPreview markdown={post?.content ?? ''} />
+            <div className="md border-c1 border-b px-4 py-8">
+              <MarkdownPreview markdown={post?.content ?? ""} />
             </div>
           )}
           <div className="pt-16">
@@ -96,7 +113,10 @@ export default function User({ loaderData }: Route.ComponentProps) {
                   >
                     <div className="flex items-center gap-4 pt-1 pb-3">
                       <div className="flex items-center">
-                        <div className="mr-2 h-5 w-5 rounded-full bg-accent" />
+                        <Avatar
+                          fullname={post?.author ?? ""}
+                          className="mr-2 h-5 w-5"
+                        />
                         <Link className="text-sm" to={`/${item.attesterName}`}>
                           <StyledName fullname={post?.author ?? ""} />
                         </Link>

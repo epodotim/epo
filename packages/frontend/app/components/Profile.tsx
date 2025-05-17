@@ -5,28 +5,14 @@ import {
   TelegramLogo,
   XLogo,
 } from "@phosphor-icons/react";
-import Avatar from "boring-avatars";
 import FarcasterLogo from "~/components/icons/Farcaster";
 import Popover from "~/components/ui/Popover";
-import { getImageUrl } from "~/lib/utils";
+import Avatar from "~/components/Avatar";
 
 export default function Profile({ data }: any) {
   return (
     <div className="flex w-full flex-col space-y-4 px-6 py-8">
-      {data?.records?.avatar ? (
-        <img
-          src={getImageUrl(data.records.avatar)}
-          className="h-20 w-20 rounded-full border-2 border-white/20"
-          alt={`${data?.uid}'s avatar`}
-        />
-      ) : (
-        <Avatar
-          variant="beam"
-          name={data?.uid ?? ""}
-          size={80}
-          className="rounded-full border-2 border-white/20"
-        />
-      )}
+      <Avatar fullname={data?.uid ?? ""} className="h-20 w-20" />
       {data?.uid && <h1 className="text-xl">{data?.uid}</h1>}
       {data?.records?.description && (
         <p className="mb-6 text-sm">{data?.records?.description}</p>

@@ -11,7 +11,7 @@ import {
   useNavigation,
 } from "react-router";
 import type { Route } from "./+types/root";
-import "./app.css";
+import "./assets/app.css";
 import { AppHandlers, AppProviders } from "~/components/App";
 import { ROOT_META } from "~/lib/const";
 

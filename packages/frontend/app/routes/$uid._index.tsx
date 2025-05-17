@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import StyledName from "~/components/StyledName";
+import Avatar from "~/components/Avatar";
 
 export function meta({ params }: Route.MetaArgs) {
   const uid = params?.uid ?? "A Profile on EPO";
@@ -48,7 +49,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   return {
     uid: "yujiym.base.eth",
     records: {
-      description: "A builder",
+      description: "Building epo.im and kon.xyz",
       keywords:
         "Solidity,Javascript,Typescript,UI/UX,Go,Prototyping,Product management",
       url: "https://oboro.xyz",
@@ -124,21 +125,27 @@ export default function User({ loaderData }: Route.ComponentProps) {
                     >
                       <div className="flex items-center gap-4 py-3">
                         <div className="flex items-center">
-                          <div className="mr-2 h-5 w-5 rounded-full bg-accent" />
                           <Link
                             to={`/${item.attesterName}`}
-                            className="text-sm"
+                            className="flex items-center text-sm"
                           >
+                            <Avatar
+                              fullname={item.attesterName}
+                              className="mr-2 h-5 w-5"
+                            />
                             <StyledName fullname={item.attesterName ?? ""} />
                           </Link>
                         </div>
                         <div className="opacity-70">&rarr;</div>
                         <div className="flex items-center">
-                          <div className="mr-2 h-5 w-5 rounded-full bg-accent" />
                           <Link
                             to={`/${item.recipientName}`}
-                            className="text-sm"
+                            className="flex items-center text-sm"
                           >
+                            <Avatar
+                              fullname={item.recipientName}
+                              className="mr-2 h-5 w-5"
+                            />
                             <StyledName fullname={item.recipientName ?? ""} />
                           </Link>
                         </div>
