@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "pnpm dlx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    }
+  }
+}
