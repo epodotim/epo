@@ -12,6 +12,7 @@ import {
   ArrowUpRight,
 } from "@phosphor-icons/react";
 import { Link } from "react-router";
+import StyledName from "~/components/StyledName";
 
 export function meta({ params }: Route.MetaArgs) {
   const uid = params?.uid ?? "A Profile on EPO";
@@ -123,13 +124,23 @@ export default function User({ loaderData }: Route.ComponentProps) {
                     >
                       <div className="flex items-center gap-4 py-3">
                         <div className="flex items-center">
-                          <div className="mr-2 h-8 w-8 rounded-full bg-accent" />
-                          <span className="text-sm">{item.attesterName}</span>
+                          <div className="mr-2 h-5 w-5 rounded-full bg-accent" />
+                          <Link
+                            to={`/${item.attesterName}`}
+                            className="text-sm"
+                          >
+                            <StyledName fullname={item.attesterName ?? ""} />
+                          </Link>
                         </div>
                         <div className="opacity-70">&rarr;</div>
                         <div className="flex items-center">
-                          <div className="mr-2 h-8 w-8 rounded-full bg-accent" />
-                          <span className="text-sm">{item.recipientName}</span>
+                          <div className="mr-2 h-5 w-5 rounded-full bg-accent" />
+                          <Link
+                            to={`/${item.recipientName}`}
+                            className="text-sm"
+                          >
+                            <StyledName fullname={item.recipientName ?? ""} />
+                          </Link>
                         </div>
                       </div>
                       <div className="flex flex-col items-start">
