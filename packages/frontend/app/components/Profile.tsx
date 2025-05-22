@@ -8,12 +8,17 @@ import {
 import FarcasterLogo from "~/components/icons/Farcaster";
 import Popover from "~/components/ui/Popover";
 import Avatar from "~/components/Avatar";
+import StyledName from "./StyledName";
 
 export default function Profile({ data }: any) {
   return (
     <div className="flex w-full flex-col space-y-4 px-6 py-8">
       <Avatar fullname={data?.uid ?? ""} className="h-20 w-20" />
-      {data?.uid && <h1 className="text-xl">{data?.uid}</h1>}
+      {data?.uid && (
+        <h1 className="text-xl">
+          <StyledName fullname={data?.uid ?? ""} />
+        </h1>
+      )}
       {data?.records?.description && (
         <p className="mb-6 text-sm">{data?.records?.description}</p>
       )}

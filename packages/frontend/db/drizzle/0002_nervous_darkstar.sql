@@ -1,0 +1,1 @@
+ALTER TABLE `post` RENAME COLUMN "preview" TO "contentProtected";

@@ -4,6 +4,9 @@ import { redirect } from "react-router";
 import { useLocation } from "react-router";
 import { MarkdownEditor } from "~/components/Editor";
 import type { Route } from "./+types/account.posts.$postUid";
+import { useAccount } from "wagmi";
+import { base } from "viem/chains";
+import { useName } from "@coinbase/onchainkit/identity";
 
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
@@ -21,17 +24,18 @@ export async function action({ request, context, params }: Route.ActionArgs) {
   const formData = await request.formData();
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
-  const preview = formData.get("preview") as string;
+  const contentProtected = formData.get("contentProtected") as string;
   const coverImg = formData.get("coverImg") as string;
   const price = Number(formData.get("price"));
+  const author = formData.get("author");
 
   const data = {
     title,
     content,
-    preview,
+    contentProtected,
     price: price > 0 ? price : null,
     coverImg,
-    author: "user123",
+    author,
   };
 
   try {
@@ -74,15 +78,19 @@ export async function loader({ context, params }: Route.ActionArgs) {
 const postSchema = z.object({
   title: z.string(),
   content: z.string(),
-  preview: z.string().optional(),
+  contentProtected: z.string().optional(),
   price: z.number().optional(),
   coverImg: z.string().optional(),
+  author: z.string(),
 });
 type PostFormType = z.infer<typeof postSchema>;
 
 export default function AccountPostEditPage({
   loaderData,
 }: Route.ComponentProps) {
+  const { address } = useAccount();
+  const { data: basename } = useName({ address, chain: base });
+
   const location = useLocation();
 
   const isNewPost = location.pathname === "/account/posts/new";
@@ -94,9 +102,10 @@ export default function AccountPostEditPage({
     defaultValue: {
       title: isNewPost ? "" : post?.title ?? "",
       content: isNewPost ? "" : post?.content ?? "",
-      preview: isNewPost ? "" : post?.preview ?? "",
+      contentProtected: isNewPost ? "" : post?.contentProtected ?? "",
       price: isNewPost ? 0 : post?.price ?? 0,
       coverImg: isNewPost ? "" : post?.coverImg ?? "",
+      author: basename ?? "",
     },
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: postSchema });
@@ -107,7 +116,7 @@ export default function AccountPostEditPage({
     fields.content.value ?? ""
   );
   const [previewMarkdown, setPreviewMarkdown] = useState(
-    fields.preview.value ?? ""
+    fields.contentProtected.value ?? ""
   );
   const [isPaid, setIsPaid] = useState(
     isNewPost ? false : post?.price ? post.price > 0 : false
@@ -116,16 +125,15 @@ export default function AccountPostEditPage({
   return (
     <AccountLayout title="Edit Post">
       <div className="content container mx-auto max-w-screen-sm py-8">
-        <div>Plan</div>
-
+        <div>Publication</div>
         <ToggleSelector
-          value={isPaid ? "paid" : "free"}
+          value={isPaid ? "paid" : "public"}
           onChange={(val) => setIsPaid(val === "paid")}
           options={[
-            { label: "Free", value: "free", ariaLabel: "Free plan" },
+            { label: "Public", value: "public", ariaLabel: "Public plan" },
             { label: "Paid", value: "paid", ariaLabel: "Paid plan" },
           ]}
-          className="border-c2 mb-5"
+          className="mb-5 border-c2"
         />
         <form
           method="post"
@@ -142,22 +150,6 @@ export default function AccountPostEditPage({
               className="border border-c2"
             />
           </div>
-          {isPaid && (
-            <div className="flex flex-col">
-              <label htmlFor={fields.preview.id}>Preview</label>
-              <>
-                <input
-                  {...getInputProps(fields.preview, { type: "hidden" })}
-                  value={previewMarkdown}
-                />
-                <MarkdownEditor
-                  markdown={previewMarkdown}
-                  onChange={(updated) => setPreviewMarkdown(updated)}
-                  className="border border-c2"
-                />
-              </>
-            </div>
-          )}
           <div className="flex flex-col">
             <label htmlFor={fields.content.id}>Content</label>
             <>
@@ -168,23 +160,48 @@ export default function AccountPostEditPage({
               <MarkdownEditor
                 markdown={contentMarkdown}
                 onChange={(updated) => setContentMarkdown(updated)}
-                className="border border-c2"
+                className="md border border-c2"
               />
             </>
           </div>
+          {isPaid && (
+            <div className="flex flex-col">
+              <label htmlFor={fields.contentProtected.id}>
+                Protected Content
+              </label>
+              <>
+                <input
+                  {...getInputProps(fields.contentProtected, {
+                    type: "hidden",
+                  })}
+                  value={previewMarkdown}
+                />
+                <MarkdownEditor
+                  markdown={previewMarkdown}
+                  onChange={(updated) => setPreviewMarkdown(updated)}
+                  className="md border border-c2"
+                />
+              </>
+            </div>
+          )}
           <div className="flex flex-col">
             <label htmlFor={fields.coverImg.id}>Cover image</label>
             <input
               {...getInputProps(fields.coverImg, { type: "text" })}
-              className="border boder-c2"
+              className="boder-c2 border"
             />
           </div>
+          <input
+            {...getInputProps(fields.author, {
+              type: "hidden",
+            })}
+          />
           {isPaid && (
             <div className="flex flex-col">
               <label htmlFor={fields.price.id}>Price</label>
               <input
                 {...getInputProps(fields.price, { type: "text" })}
-                className="border boder-c2"
+                className="boder-c2 border"
               />
             </div>
           )}

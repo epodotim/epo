@@ -8,12 +8,12 @@ export const post = sqliteTable(
       .primaryKey({ autoIncrement: true })
       .notNull(),
     uid: text().notNull(), // short UUID for post - `'73WakrfVbNJBaAmhQtEeDv'`
-    author: text().notNull(), // owner name - `user.base.eth` or `user.epo.im`
+    author: text().notNull(), // owner name - `user.base.eth` or `user.kon.id`
     address: text(), // optioanal
     label: text(), // category
     title: text(),
-    content: text(),
-    preview: text(), // oprional: content preview for paid contents
+    content: text(), // visible content for paid contents
+    // contentProtected: text(), // protected content for paid contents
     coverImg: text(), // optional: cover image url
     price: integer(), // optional: price for paid contents
     priceToken: text(), // optional: priceToken for paid contents
@@ -47,15 +47,40 @@ export const post_meta = sqliteTable(
   },
   (t) => [
     index("post_id_idx").on(t.postId),
-    index("post_uid_idx").on(t.postId),
+    index("post_uid_idx").on(t.postUid),
     index("m_key_idx").on(t.mKey),
   ],
 );
 
-export const postRelations = relations(post, ({ many }) => ({
+export const post_protected = sqliteTable(
+  "post_protected",
+  {
+    id: integer({ mode: "number" })
+      .primaryKey({ autoIncrement: true })
+      .notNull(),
+    postId: integer().notNull(),
+    postUid: text().notNull(),
+    content: text(),
+    createdAt: text().notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (t) => [
+    index("post_id_idx").on(t.postId),
+    index("post_uid_idx").on(t.postUid),
+  ],
+);
+
+export const postRelations = relations(post, ({ one, many }) => ({
+  post_protected: one(post_protected),
   post_meta: many(post_meta),
 }));
 
+export const postProtectedRelations = relations(post_protected, ({ one }) => ({
+  post: one(post, {
+    fields: [post_protected.postUid],
+    references: [post.uid],
+  }),
+}));
+
 export const postMetaRelations = relations(post_meta, ({ one }) => ({
-  post: one(post, { fields: [post_meta.postId], references: [post.id] }),
+  post: one(post, { fields: [post_meta.postUid], references: [post.uid] }),
 }));

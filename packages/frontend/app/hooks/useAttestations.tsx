@@ -6,7 +6,7 @@ export function useAttestations(search: string) {
   const { data, isLoading } = useQuery({
     queryKey: ["AttestationsQuery", EAS_SCHEMA_ADDRESS, search],
     queryFn: async () =>
-      request("https://base.easscan.org/graphql", AttestationsQuery, {
+      request("https://base-sepolia.easscan.org/graphql", AttestationsQuery, {
         schemaId: EAS_SCHEMA_ADDRESS,
         search,
       }),

@@ -5,6 +5,7 @@ import type { Basename } from "~/lib/basename";
 import type { Route } from "./+types/$uid._index";
 import { Tabs } from "@base-ui-components/react/tabs";
 import { useAttestations } from "~/hooks/useAttestations";
+import { getBasenameTextRecord, getBasenameTextRecords } from "~/lib/basename";
 import {
   LinkSimple,
   Clock,
@@ -27,15 +28,6 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   // const url2 = await getBasenameTextRecord(uid, "url2");
   // const url3 = await getBasenameTextRecord(uid, "url3");
   // const textRecords = await getBasenameTextRecords(uid);
-  // return {
-  //   uid,
-  //   records: {
-  //     ...textRecords,
-  //     location,
-  //     url2,
-  //     url3,
-  //   },
-  // };
 
   const posts = await context.db.query.post.findMany({
     where: (post, { isNotNull, eq, and }) =>
@@ -45,6 +37,19 @@ export async function loader({ context, params }: Route.LoaderArgs) {
     },
     orderBy: (post, { desc }) => [desc(post.publishedAt)],
   });
+
+  console.log("posts:::", posts);
+
+  // return {
+  //   uid,
+  //   records: {
+  //     ...textRecords,
+  //     location,
+  //     url2,
+  //     url3,
+  //   },
+  //   posts,
+  // };
 
   return {
     uid: "yujiym.base.eth",
@@ -71,6 +76,7 @@ export default function User({ loaderData }: Route.ComponentProps) {
   const { uid } = useParams();
   const { data: attests } = useAttestations(uid);
   const posts = loaderData?.posts;
+  console.log("posts:::----", posts, "attests:::----", attests);
 
   return (
     <BaseLayout>
@@ -79,13 +85,16 @@ export default function User({ loaderData }: Route.ComponentProps) {
           <Profile data={loaderData} />
           <Tabs.Root className="" defaultValue="posts">
             <Tabs.List className="relative z-0 flex gap-4 border-c2 border-b-2">
-              <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="posts">
+              <Tabs.Tab className="py-1.5 pr-2.5 pl-3.5 text-sm" value="posts">
                 Posts
                 {posts && posts.length > 0 && (
                   <span className="pill">{posts.length}</span>
                 )}
               </Tabs.Tab>
-              <Tabs.Tab className="px-2.5 py-1.5 text-sm" value="attestations">
+              <Tabs.Tab
+                className="py-1.5 pr-2.5 pl-3.5 text-sm"
+                value="attestations"
+              >
                 Attestions
                 {attests && attests.length > 0 && (
                   <span className="pill">{attests.length}</span>
@@ -94,7 +103,7 @@ export default function User({ loaderData }: Route.ComponentProps) {
               <Tabs.Indicator className="-bottom-0.5 absolute z-[-1] w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] border-c1 border-b-2 transition-all duration-200 ease-in-out" />
             </Tabs.List>
             <Tabs.Panel className="relative" value="posts">
-              {attests && attests.length > 0 ? (
+              {posts && posts.length > 0 ? (
                 <ul className="flex w-full flex-col">
                   {posts.map((post) => (
                     <li
@@ -112,7 +121,7 @@ export default function User({ loaderData }: Route.ComponentProps) {
                   ))}
                 </ul>
               ) : (
-                <p className="opacity-70">No posts yet</p>
+                <p className="py-12 text-center opacity-70">No posts yet</p>
               )}
             </Tabs.Panel>
             <Tabs.Panel className="relative" value="attestations">
@@ -169,7 +178,7 @@ export default function User({ loaderData }: Route.ComponentProps) {
                       </div>
                       <a
                         className="absolute top-2 right-2 flex items-center"
-                        href={`https://base.easscan.org/attestation/view/${item.id}`}
+                        href={`https://base-sepolia.easscan.org/attestation/view/${item.id}`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -183,7 +192,9 @@ export default function User({ loaderData }: Route.ComponentProps) {
                   ))}
                 </ul>
               ) : (
-                <p className="opacity-70">No attests yet</p>
+                <p className="py-12 text-center opacity-70">
+                  No attestations yet
+                </p>
               )}
             </Tabs.Panel>
           </Tabs.Root>

@@ -10,7 +10,10 @@ import { abi } from "~/abis/EAS";
 import { useEthersSigner } from "~/lib/ethers";
 
 const callsCallback = async (signer, data) => {
+  console.log("----", signer, data, EAS_CONTRACT_ADDRESS, abi);
   const args = await attest(signer, data);
+
+  console.log("------", args);
 
   return [
     {
@@ -36,7 +39,7 @@ export const AttestConfirmDialog = ({
   setConfirmOpen: (open: boolean) => void;
 }) => {
   const { address } = useAccount();
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("");
   const signer = useEthersSigner();
 
   const handleOnStatus = useCallback((status: LifecycleStatus) => {
@@ -73,6 +76,7 @@ export const AttestConfirmDialog = ({
             message,
           })}
           btnText="Attest"
+          handleOnStatus={handleOnStatus}
         />
       </form>
     </ConfirmDialog>

@@ -8,7 +8,7 @@ import {
   ArrowUpRight,
   ChatTeardropDots,
 } from "@phosphor-icons/react";
-import { Link } from "react-router";
+import { Link, data } from "react-router";
 import { useAttestations } from "~/hooks/useAttestations";
 import { MarkdownPreview } from "~/components/MarkdownPreview";
 import Avatar from "~/components/Avatar";
@@ -28,9 +28,22 @@ export async function loader({ context, params }: Route.LoaderArgs) {
     },
   });
 
-  return {
+  const isPaymentRequired = post?.price && post.price > 0;
+
+  const loaderData = {
     post,
+    isPaymentRequired,
+    isPhurchased: true,
   };
+
+  if (isPaymentRequired) {
+    return data(loaderData, {
+      status: 402,
+      statusText: "Payment Required",
+    });
+  }
+
+  return data(loaderData);
 }
 
 export function meta({ data }: Route.MetaArgs) {
@@ -53,8 +66,6 @@ export default function Post({ loaderData }: Route.ComponentProps) {
 
   console.log("----- Post ---", post, attests);
 
-  const isPurchased = false;
-
   return (
     <BaseLayout
       renderHeader={
@@ -73,11 +84,11 @@ export default function Post({ loaderData }: Route.ComponentProps) {
               {new Date(String(post.publishedAt)).toLocaleString()}
             </span>
           </div>
-          {post?.price && post?.price > 0 ? (
-            !isPurchased ? (
+          {loaderData.isPaymentRequired ? (
+            !loaderData.isPhurchased ? (
               <>
                 <div className="md border-b border-dashed px-4 py-8">
-                  <MarkdownPreview markdown={post?.preview ?? ""} />
+                  <MarkdownPreview markdown={post?.content ?? ""} />
                 </div>
                 <div className="flex items-center justify-between border-c1 border-b p-4">
                   <span className="pricetag">
@@ -94,13 +105,13 @@ export default function Post({ loaderData }: Route.ComponentProps) {
             ) : (
               <>
                 <div className="md border-b border-dashed px-4 py-8">
-                  <MarkdownPreview markdown={post?.preview ?? ""} />
+                  <MarkdownPreview markdown={post?.content ?? ""} />
                 </div>
                 <div className="border-b border-dashed py-10 text-center text-lg opacity-70">
                   Thanks for your purchase! 🎉
                 </div>
                 <div className="md border-c1 border-b px-4 py-8">
-                  <MarkdownPreview markdown={post?.content ?? ""} />
+                  <MarkdownPreview markdown={post?.contentProtected ?? ""} />
                 </div>
               </>
             )
@@ -158,7 +169,7 @@ export default function Post({ loaderData }: Route.ComponentProps) {
                     </div>
                     <a
                       className="absolute top-2 right-2 flex items-center"
-                      href={`https://base.easscan.org/attestation/view/${item.id}`}
+                      href={`https://base-sepolia.easscan.org/attestation/view/${item.id}`}
                       target="_blank"
                       rel="noreferrer"
                     >

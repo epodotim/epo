@@ -29,7 +29,7 @@ export function AccountLayout({
 
   return (
     <div className="wrapper">
-      <header className="sticky top-0 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu md:pl-64">
+      <header className="sticky top-0 z-30 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu md:pl-64">
         <h1 className="hover-bg-c1 flex items-center justify-center rounded-full p-1.5">
           <button
             type="button"
@@ -87,7 +87,7 @@ export function BaseLayout({
     <div className="wrapper">
       <header
         className={cn(
-          "sticky top-0 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu",
+          "sticky top-0 z-30 flex h-14 min-h-14 items-center justify-between border-c2 border-b px-4 content-menu",
           isScrolled ? "border-c2" : "border-transparent"
         )}
       >
